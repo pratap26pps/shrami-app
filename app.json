@@ -1,11 +1,6 @@
 {
   "expo": {
-  "name": "Shrami",
-    "slug": "shrami",
-    "version": "1.0.0",
-       "jsEngine": "hermes",
-    "orientation": "portrait",
-    "platforms": ["ios", "android"],
-    "entryPoint": "./App.js"
+    "name": "shrami",
+    "slug": "shrami"
   }
 }
