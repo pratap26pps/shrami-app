@@ -1,12 +1,9 @@
 /** @jsxImportSource nativewind */
-import React, { useEffect } from "react";
+ 
 import { View, Text } from "react-native";
 
 export default function TailwindChecker() {
-  useEffect(() => {
-    // Skip runtime verify (can throw if JSX transform not applied yet).
-    // We rely on Babel/nativewind config and file pragmas for transforms.
-  }, []);
+ 
 
   return (
     <View style={{ padding: 8 }}>
