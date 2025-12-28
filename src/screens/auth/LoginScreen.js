@@ -1,35 +1,65 @@
-import { useState } from "react";
-import { View, Text, TextInput, Pressable } from "react-native";
-import { sendOtp } from "../../services/firebaseAuth";
+import React, { useState } from "react";
+import { View, Text, TextInput, Button } from "react-native";
+import { auth } from "../../services/firebase";
+import { FirebaseRecaptchaVerifierModal } from "expo-firebase-recaptcha";
+import { PhoneAuthProvider, signInWithCredential } from "firebase/auth";
 
-export default function LoginScreen({ navigation }) {
+export default function LoginScreen() {
   const [phone, setPhone] = useState("");
+  const [verificationId, setVerificationId] = useState(null);
+  const [otp, setOtp] = useState("");
 
-  const handleSendOtp = async () => {
-    const confirmation = await sendOtp(`+91${phone}`);
-    navigation.navigate("OtpScreen", { confirmation });
+  const recaptchaVerifier = React.useRef(null);
+
+  const sendOTP = async () => {
+    const provider = new PhoneAuthProvider(auth);
+    const id = await provider.verifyPhoneNumber(
+      `+91${phone}`,
+      recaptchaVerifier.current
+    );
+    setVerificationId(id);
+    alert("OTP Sent");
+  };
+
+  const verifyOTP = async () => {
+    const credential = PhoneAuthProvider.credential(
+      verificationId,
+      otp
+    );
+    const result = await signInWithCredential(auth, credential);
+
+    const token = await result.user.getIdToken();
+    console.log("Firebase Token:", token);
+
+    // Send token to backend
+    await fetch("http://localhost:5000/api/auth/phone-login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ token }),
+    });
   };
 
   return (
-    <View className="flex-1 mt-32 justify-center px-5">
-      <Text className="text-xl text-center mb-3">Enter Mobile Number</Text>
-
-      <TextInput
-        placeholder="10 digit mobile number"
-        keyboardType="number-pad"
-        value={phone}
-        onChangeText={setPhone}
-        className="border p-3 mb-4 text-center text-lg font-medium"
+    <View style={{ padding: 20 }}>
+      <FirebaseRecaptchaVerifierModal
+        ref={recaptchaVerifier}
+        firebaseConfig={auth.app.options}
       />
 
-      <Pressable
-  onPress={handleSendOtp}
-  className="bg-blue-600 py-3 rounded-lg"
->
-  <Text className="text-white text-center text-lg font-semibold">
-    Send OTP
-  </Text>
-</Pressable>
+      <Text>Phone Number</Text>
+      <TextInput
+        placeholder="9876543210"
+        keyboardType="phone-pad"
+        onChangeText={setPhone}
+      />
+      <Button title="Send OTP" onPress={sendOTP} />
+
+      {verificationId && (
+        <>
+          <TextInput placeholder="OTP" onChangeText={setOtp} />
+          <Button title="Verify OTP" onPress={verifyOTP} />
+        </>
+      )}
     </View>
   );
 }
