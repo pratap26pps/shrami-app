@@ -1,81 +1,163 @@
-import React, { useState ,useRef} from "react";
-import { View, Text, TextInput, Button } from "react-native";
-import { auth } from "../../services/firebase";
-import { FirebaseRecaptchaVerifierModal } from "expo-firebase-recaptcha";
-import { PhoneAuthProvider, signInWithCredential } from "firebase/auth";
- 
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, Image } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+
  
 export default function LoginScreen() {
-  const [phone, setPhone] = useState("");
-  const [verificationId, setVerificationId] = useState(null);
-  const [otp, setOtp] = useState("");
-
-  const recaptchaVerifier = useRef(null);
-
- const sendOTP = async () => {
-  try {
-    if (!phone || phone.length !== 10) {
-      alert("Enter valid 10 digit phone number");
-      return;
-    }
-
-    const provider = new PhoneAuthProvider(auth);
-
-    const id = await provider.verifyPhoneNumber(
-      `+91${phone}`,
-      recaptchaVerifier.current
-    );
-
-    setVerificationId(id);
-    alert("OTP Sent");
-  } catch (error) {
-    console.log("SEND OTP ERROR 👉", error);
-    alert(error.message);
-  }
-};
-
-
-  const verifyOTP = async () => {
-    try {
-      const credential = PhoneAuthProvider.credential(verificationId, otp);
-      const result = await signInWithCredential(auth, credential);
-
-      const token = await result.user.getIdToken();
-      console.log("Firebase Token:", token);
-
-      await fetch("http://192.168.3.7:5000/api/auth/phone-login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ token }),
-      });
-    } catch (error) {
-      console.log("VERIFY OTP ERROR 👉", error);
-      alert(error.message);
-    }
-  };
-
-
+ 
+ function StatBox({ text }) {
   return (
-    <View style={{ padding: 20 ,marginTop:40}}>
-      <FirebaseRecaptchaVerifierModal
-        ref={recaptchaVerifier}
-        firebaseConfig={auth.app.options}
-      />
-
-      <Text>Phone Number</Text>
-      <TextInput
-        placeholder="9876543210"
-        keyboardType="phone-pad"
-        onChangeText={setPhone}
-      />
-      <Button title="Send OTP" onPress={sendOTP} />
-
-      {verificationId && (
-        <>
-          <TextInput placeholder="OTP" onChangeText={setOtp} />
-          <Button title="Verify OTP" onPress={verifyOTP} />
-        </>
-      )}
+    <View style={styles.statBox}>
+      <Text style={styles.statText}>{text}</Text>
     </View>
   );
 }
+  return (
+    <SafeAreaView style={styles.container}>
+      {/* Header */}
+      <View style={styles.header}>
+        <Text style={styles.title}>Sign In</Text>
+        <Text style={styles.subtitle}>
+          Register for free if you are new
+        </Text>
+
+        <View style={styles.statsRow}>
+          <StatBox text="1000+ Workers" />
+          <StatBox text="250+ Projects" />
+          <StatBox text="100% Trusted" />
+        </View>
+      </View>
+
+   
+      {/* Form */}
+      <View style={styles.form}>
+        <TextInput
+          placeholder="Contact no."
+          style={styles.input}
+          keyboardType="phone-pad"
+        />
+
+        <TextInput
+          placeholder="Password"
+          style={styles.input}
+          secureTextEntry
+        />
+
+        <Text style={styles.forgot}>Forgot Password?</Text>
+
+        <TouchableOpacity style={styles.primaryBtn}>
+          <Text style={styles.primaryBtnText}>Sign In</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.googleBtn}>
+          <Image
+            source={require("../../assets/images/google.png")}
+            style={styles.googleIcon}
+          />
+          <Text style={styles.googleText}>Continue with Google</Text>
+        </TouchableOpacity>
+      </View>
+    </SafeAreaView>
+
+
+  );
+}
+
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#FF1E1E",
+  },
+
+  header: {
+    padding: 20,
+  },
+
+  title: {
+    fontSize: 30,
+    fontWeight: "bold",
+    color: "#000",
+  },
+
+  subtitle: {
+    color: "#000",
+    marginTop: 4,
+  },
+
+  statsRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginTop: 20,
+    
+  },
+
+  statBox: {
+    backgroundColor: "#fff",
+    padding: 12,
+    borderRadius: 14,
+    width: "30%",
+    alignItems: "center",
+  },
+
+  statText: {
+    fontWeight: "bold",
+    textAlign: "center",
+  },
+
+  form: {
+    flex: 1,
+    backgroundColor: "#FFF5F5",
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
+    padding: 20,
+    marginTop:112,
+    marginBottom: -35,
+  },
+
+  input: {
+    backgroundColor: "#EDEDED",
+    padding: 14,
+    borderRadius: 25,
+    marginBottom: 14,
+  },
+
+  forgot: {
+    alignSelf: "flex-end",
+    marginBottom: 20,
+    fontWeight: "500",
+  },
+
+  primaryBtn: {
+    backgroundColor: "#000",
+    padding: 16,
+    borderRadius: 30,
+    alignItems: "center",
+    marginBottom: 14,
+  },
+
+  primaryBtnText: {
+    color: "#fff",
+    fontWeight: "bold",
+    fontSize: 16,
+  },
+
+  googleBtn: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    borderWidth: 1,
+    borderRadius: 30,
+    padding: 14,
+  },
+
+  googleIcon: {
+    width: 20,
+    height: 20,
+    marginRight: 10,
+  },
+
+  googleText: {
+    fontWeight: "bold",
+  },
+});
+
