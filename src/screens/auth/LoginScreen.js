@@ -1,22 +1,21 @@
-import { 
-  View, 
-  Text, 
-  StyleSheet, 
-  TextInput, 
-  TouchableOpacity, 
-  Image, 
-  Alert 
+import {
+  View,
+  Text,
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+  Image,
+  Alert,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 
 import { useState } from "react";
- 
-export default function LoginScreen() {
 
- const navigation = useNavigation();
-const [showPassword, setShowPassword] = useState(false);
+export default function LoginScreen() {
+  const navigation = useNavigation();
+  const [showPassword, setShowPassword] = useState(false);
 
   const [contactNumber, setContactNumber] = useState("");
   const [password, setPassword] = useState("");
@@ -47,7 +46,7 @@ const [showPassword, setShowPassword] = useState(false);
       );
 
       const data = await response.json();
-      console.log("LoginHandler",data);
+      console.log("LoginHandler", data);
       if (!response.ok || !data.success) {
         throw new Error(data.error || "Login failed");
       }
@@ -70,22 +69,34 @@ const [showPassword, setShowPassword] = useState(false);
     }
   };
 
-   
- function StatBox({ text }) {
-  return (
-    <View style={styles.statBox}>
-      <Text style={styles.statText}>{text}</Text>
-    </View>
-  );
-}
+  function StatBox({ text }) {
+    return (
+      <View style={styles.statBox}>
+        <Text style={styles.statText}>{text}</Text>
+      </View>
+    );
+  }
   return (
     <SafeAreaView style={styles.container}>
       {/* Header */}
+      <View style={styles.nevbar}>
+        <Ionicons
+          onPress={() => navigation.navigate("Welcome")}
+          name="arrow-back"
+          size={26}
+          color="#555"
+        />
+        <Text
+          onPress={() => navigation.navigate("Signup")}
+          style={styles.Register}
+        >
+          Register
+        </Text>
+      </View>
+
       <View style={styles.header}>
         <Text style={styles.title}>Sign In</Text>
-        <Text style={styles.subtitle}>
-          Register for free if you are new
-        </Text>
+        <Text style={styles.subtitle}>Register for free if you are new</Text>
 
         <View style={styles.statsRow}>
           <StatBox text="1000+ Workers" />
@@ -94,7 +105,6 @@ const [showPassword, setShowPassword] = useState(false);
         </View>
       </View>
 
-   
       {/* Form */}
       <View style={styles.form}>
         <TextInput
@@ -106,34 +116,30 @@ const [showPassword, setShowPassword] = useState(false);
           onChangeText={setContactNumber}
         />
 
-   <View style={styles.passwordContainer}>
-  <TextInput
-    placeholder="Password"
-    style={styles.passwordInput}
-    secureTextEntry={!showPassword}
-    value={password}
-    onChangeText={setPassword}
-  />
+        <View style={styles.passwordContainer}>
+          <TextInput
+            placeholder="Password"
+            style={styles.passwordInput}
+            secureTextEntry={!showPassword}
+            value={password}
+            onChangeText={setPassword}
+          />
 
-  <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
-    <Ionicons
-      name={showPassword ? "eye-off" : "eye"}
-      size={22}
-      color="#555"
-    />
-  </TouchableOpacity>
-</View>
+          <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
+            <Ionicons
+              name={showPassword ? "eye-off" : "eye"}
+              size={22}
+              color="#555"
+            />
+          </TouchableOpacity>
+        </View>
 
-<TouchableOpacity onPress={() => navigation.navigate("ForgotPassword")}>
-  <Text style={styles.forgot}>Forgot Password?</Text>
-</TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate("ForgotPassword")}>
+          <Text style={styles.forgot}>Forgot Password?</Text>
+        </TouchableOpacity>
 
-
-       <TouchableOpacity
-          style={[
-            styles.primaryBtn,
-            loading && { opacity: 0.7 },
-          ]}
+        <TouchableOpacity
+          style={[styles.primaryBtn, loading && { opacity: 0.7 }]}
           onPress={loginhandler}
           disabled={loading}
         >
@@ -142,28 +148,24 @@ const [showPassword, setShowPassword] = useState(false);
           </Text>
         </TouchableOpacity>
 
-
         <TouchableOpacity
-               onPress={() =>
+          onPress={() =>
             Linking.openURL(
               "https://shrami-backend.onrender.com/api/auth/google"
             )
           }
-                style={styles.googleBtn}>
-                  <Image
-                    source={require("../../assets/images/google.png")}
-                    style={styles.googleIcon}
-                  />
-                  <Text style={styles.googleText}>Continue with Google</Text>
-                </TouchableOpacity>
-
+          style={styles.googleBtn}
+        >
+          <Image
+            source={require("../../assets/images/google.png")}
+            style={styles.googleIcon}
+          />
+          <Text style={styles.googleText}>Continue with Google</Text>
+        </TouchableOpacity>
       </View>
     </SafeAreaView>
-
-
   );
 }
-
 
 const styles = StyleSheet.create({
   container: {
@@ -173,6 +175,19 @@ const styles = StyleSheet.create({
 
   header: {
     padding: 20,
+  },
+
+  nevbar: {
+    flexDirection: "row",
+    fontWeight: "bold",
+    color: "#000",
+    justifyContent: "space-between",
+    margin: 8,
+  },
+  Register: {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "#000",
   },
 
   title: {
@@ -190,7 +205,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     marginTop: 20,
-    
   },
 
   statBox: {
@@ -212,7 +226,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
     padding: 20,
-    marginTop:112,
+    marginTop: 112,
     marginBottom: -35,
   },
 
@@ -263,18 +277,16 @@ const styles = StyleSheet.create({
   },
 
   passwordContainer: {
-  flexDirection: "row",
-  alignItems: "center",
-  backgroundColor: "#EDEDED",
-  borderRadius: 25,
-  paddingHorizontal: 16,
-  marginBottom: 14,
-},
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#EDEDED",
+    borderRadius: 25,
+    paddingHorizontal: 16,
+    marginBottom: 14,
+  },
 
-passwordInput: {
-  flex: 1,
-  paddingVertical: 14,
-},
-
+  passwordInput: {
+    flex: 1,
+    paddingVertical: 14,
+  },
 });
-

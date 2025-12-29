@@ -1,4 +1,4 @@
-import { useState ,useRef} from "react";
+import { useState, useRef } from "react";
 import {
   View,
   Text,
@@ -8,9 +8,10 @@ import {
   SafeAreaView,
   Image,
   Linking,
-  KeyboardAvoidingView, Platform
+  KeyboardAvoidingView,
+  Platform,
 } from "react-native";
- 
+import { useNavigation } from "@react-navigation/native";
 
 import { auth } from "../../services/firebase";
 import { PhoneAuthProvider, signInWithCredential } from "firebase/auth";
@@ -18,98 +19,110 @@ import { FirebaseRecaptchaVerifierModal } from "expo-firebase-recaptcha";
 import { Picker } from "@react-native-picker/picker";
 import { Ionicons } from "@expo/vector-icons";
 export default function SignUpScreen() {
-const [showPassword, setShowPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const navigation = useNavigation();
+  const [phone, setPhone] = useState("");
+  const [verificationId, setVerificationId] = useState(null);
+  const [otp, setOtp] = useState("");
+  const [password, setPassword] = useState("");
+  const [fullName, setFullname] = useState("");
+  const [accountType, setAccountType] = useState("");
+  const recaptchaVerifier = useRef(null);
 
-      const [phone, setPhone] = useState("");
-      const [verificationId, setVerificationId] = useState(null);
-      const [otp, setOtp] = useState("");
-      const [password, setPassword] = useState("");
-      const [fullName, setFullname] = useState("");
-      const [accountType, setAccountType] = useState("");
-      const recaptchaVerifier = useRef(null);
-    
-     const sendOTP = async () => {
-      try {
-
-        if (!fullName) {
+  const sendOTP = async () => {
+    try {
+      if (!fullName) {
         alert("Enter full name");
         return;
-        }
+      }
 
-        if (!accountType) {
+      if (!accountType) {
         alert("Select account type");
         return;
-        }
-
-        if (!phone || phone.length !== 10) {
-          alert("Enter valid 10 digit phone number");
-          return;
-        }
-
-        if (!password || password.length < 6) {
-         alert( "Password must be at least 6 characters")
-        };
-    
-    
-        const provider = new PhoneAuthProvider(auth);
-    
-        const id = await provider.verifyPhoneNumber(
-          `+91${phone}`,
-          recaptchaVerifier.current
-        );
-    
-        setVerificationId(id);
-        alert("OTP Sent");
-      } catch (error) {
-        console.log("SEND OTP ERROR 👉", error);
-        alert(error.message);
       }
-    };
-    
-    
-      const verifyOTP = async () => {
-        try {
-          const credential = PhoneAuthProvider.credential(verificationId, otp);
-          const result = await signInWithCredential(auth, credential);
-    
-          const token = await result.user.getIdToken();
-          console.log("Firebase Token:", token);
-    
-         const response =  await fetch("https://shrami-backend.onrender.com/api/auth/SignupHandler", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ token, fullName,  password, accountType }),
-          });
 
-     const data = await response.json();
+      if (!phone || phone.length !== 10) {
+        alert("Enter valid 10 digit phone number");
+        return;
+      }
 
-    if (!response.ok || !data.success) {
-      throw new Error(data.message || "Signup failed");
+      if (!password || password.length < 6) {
+        alert("Password must be at least 6 characters");
+      }
+
+      const provider = new PhoneAuthProvider(auth);
+
+      const id = await provider.verifyPhoneNumber(
+        `+91${phone}`,
+        recaptchaVerifier.current
+      );
+
+      setVerificationId(id);
+      alert("OTP Sent");
+    } catch (error) {
+      console.log("SEND OTP ERROR 👉", error);
+      alert(error.message);
     }
+  };
 
-    // ✅ SUCCESS ALERT + NAVIGATION
-    Alert.alert(
-      "Success 🎉",
-      "Account created successfully",
-      [
+  const verifyOTP = async () => {
+    try {
+      const credential = PhoneAuthProvider.credential(verificationId, otp);
+      const result = await signInWithCredential(auth, credential);
+
+      const token = await result.user.getIdToken();
+      console.log("Firebase Token:", token);
+
+      const response = await fetch(
+        "https://shrami-backend.onrender.com/api/auth/SignupHandler",
         {
-          text: "OK",
-          onPress: () => navigation.replace("Profile"),
-        },
-      ],
-      { cancelable: false }
-    );
-
-        } catch (error) {
-          console.log("VERIFY OTP ERROR 👉", error);
-          alert(error.message);
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ token, fullName, password, accountType }),
         }
-      };
-    
+      );
+
+      const data = await response.json();
+
+      if (!response.ok || !data.success) {
+        throw new Error(data.message || "Signup failed");
+      }
+
+      // ✅ SUCCESS ALERT + NAVIGATION
+      Alert.alert(
+        "Success 🎉",
+        "Account created successfully",
+        [
+          {
+            text: "OK",
+            onPress: () => navigation.replace("Profile"),
+          },
+        ],
+        { cancelable: false }
+      );
+    } catch (error) {
+      console.log("VERIFY OTP ERROR 👉", error);
+      alert(error.message);
+    }
+  };
 
   return (
     <SafeAreaView style={styles.container}>
-        
+      <View style={styles.nevbar}>
+        <Ionicons
+          onPress={() => navigation.navigate("Welcome")}
+          name="arrow-back"
+          size={26}
+          color="#555"
+        />
+        <Text
+          onPress={() => navigation.navigate("Login")}
+          style={styles.Register}
+        >
+          Login
+        </Text>
+      </View>
+
       <View style={styles.header}>
         <Text style={styles.title}>Sign Up</Text>
         <Text style={styles.subtitle}>
@@ -117,109 +130,106 @@ const [showPassword, setShowPassword] = useState(false);
         </Text>
       </View>
 
-    {!verificationId ?(
-      <View style={styles.form}>
-      
-       <FirebaseRecaptchaVerifierModal
-        ref={recaptchaVerifier}
-        firebaseConfig={auth.app.options}
-      />
-      
-       <TextInput
-        placeholder="Full name"
-        style={styles.input}
-        value={fullName}
-        onChangeText={setFullname}
-        />
-
-        <View style={styles.pickerContainer}>
-        <Picker
-            selectedValue={accountType}
-            onValueChange={(itemValue) => setAccountType(itemValue)}
-        >
-            <Picker.Item label="Select Account Type" value="" />
-            <Picker.Item label="Construction" value="Construction" />
-            <Picker.Item label="Transport" value="Transport" />
-            <Picker.Item label="House Help" value="HouseHelp" />
-        </Picker>
-        </View>
-
-
-        <TextInput
-          placeholder="Contact no."
-          style={styles.input}
-          keyboardType="phone-pad"
-           onChangeText={setPhone}
-        />
- 
-   <View style={styles.passwordContainer}>
-  <TextInput
-    placeholder="Password"
-    style={styles.passwordInput}
-    secureTextEntry={!showPassword}
-    value={password}
-    onChangeText={setPassword}
-  />
-
-  <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
-    <Ionicons
-      name={showPassword ? "eye-off" : "eye"}
-      size={22}
-      color="#555"
-    />
-  </TouchableOpacity>
-</View>
-
-
-        <TouchableOpacity onPress={sendOTP}  style={styles.primaryBtn}>
-          <Text style={styles.primaryBtnText}>Sign Up</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-       onPress={() =>
-    Linking.openURL(
-      "https://shrami-backend.onrender.com/api/auth/google"
-    )
-  }
-        style={styles.googleBtn}>
-          <Image
-            source={require("../../assets/images/google.png")}
-            style={styles.googleIcon}
+      {!verificationId ? (
+        <View style={styles.form}>
+          <FirebaseRecaptchaVerifierModal
+            ref={recaptchaVerifier}
+            firebaseConfig={auth.app.options}
           />
-          <Text style={styles.googleText}>Continue with Google</Text>
-        </TouchableOpacity>
-      </View>
-       ):
-         (
+
+          <TextInput
+            placeholder="Full name"
+            style={styles.input}
+            value={fullName}
+            onChangeText={setFullname}
+          />
+
+          <View style={styles.pickerContainer}>
+            <Picker
+              selectedValue={accountType}
+              onValueChange={(itemValue) => setAccountType(itemValue)}
+            >
+              <Picker.Item label="Select Account Type" value="" />
+              <Picker.Item label="Construction" value="Construction" />
+              <Picker.Item label="Transport" value="Transport" />
+              <Picker.Item label="House Help" value="HouseHelp" />
+            </Picker>
+          </View>
+
+          <TextInput
+            placeholder="Contact no."
+            style={styles.input}
+            keyboardType="phone-pad"
+            onChangeText={setPhone}
+          />
+
+          <View style={styles.passwordContainer}>
+            <TextInput
+              placeholder="Password"
+              style={styles.passwordInput}
+              secureTextEntry={!showPassword}
+              value={password}
+              onChangeText={setPassword}
+            />
+
+            <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
+              <Ionicons
+                name={showPassword ? "eye-off" : "eye"}
+                size={22}
+                color="#555"
+              />
+            </TouchableOpacity>
+          </View>
+
+          <TouchableOpacity onPress={sendOTP} style={styles.primaryBtn}>
+            <Text style={styles.primaryBtnText}>Sign Up</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            onPress={() =>
+              Linking.openURL(
+                "https://shrami-backend.onrender.com/api/auth/google"
+              )
+            }
+            style={styles.googleBtn}
+          >
+            <Image
+              source={require("../../assets/images/google.png")}
+              style={styles.googleIcon}
+            />
+            <Text style={styles.googleText}>Continue with Google</Text>
+          </TouchableOpacity>
+        </View>
+      ) : (
         <>
-         <KeyboardAvoidingView
-      style={styles.container}
-      behavior={Platform.OS === "ios" ? "padding" : undefined}
-    >
-      <View style={styles.card}>
-        <Text style={styles.title}>OTP Verification</Text>
-        <Text style={styles.subtitle}>Enter the OTP sent to your number</Text>
+          <KeyboardAvoidingView
+            style={styles.container}
+            behavior={Platform.OS === "ios" ? "padding" : undefined}
+          >
+            <View style={styles.card}>
+              <Text style={styles.title}>OTP Verification</Text>
+              <Text style={styles.subtitle}>
+                Enter the OTP sent to your number
+              </Text>
 
-        <TextInput
-          style={styles.input}
-          placeholder="Enter OTP"
-          keyboardType="number-pad"
-          value={otp}
-          onChangeText={setOtp}
-        />
+              <TextInput
+                style={styles.input}
+                placeholder="Enter OTP"
+                keyboardType="number-pad"
+                value={otp}
+                onChangeText={setOtp}
+              />
 
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => verifyOTP(otp)}
-        >
-          <Text style={styles.buttonText}>Verify OTP</Text>
-        </TouchableOpacity>
-      </View>
-         </KeyboardAvoidingView>
+              <TouchableOpacity
+                style={styles.button}
+                onPress={() => verifyOTP(otp)}
+              >
+                <Text style={styles.buttonText}>Verify OTP</Text>
+              </TouchableOpacity>
+            </View>
+          </KeyboardAvoidingView>
         </>
       )}
-
-
     </SafeAreaView>
   );
 }
@@ -228,18 +238,31 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#FF1E1E",
-
   },
 
   header: {
     padding: 20,
-    marginTop:80
+    marginTop: 60,
+  },
+
+  nevbar: {
+    flexDirection: "row",
+    fontWeight: "bold",
+    color: "#000",
+    justifyContent: "space-between",
+    margin: 8,
+    marginTop: 50,
+  },
+  Register: {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "#000",
   },
 
   title: {
     fontSize: 30,
     fontWeight: "bold",
-    color:"#fff"
+    color: "#fff",
   },
 
   subtitle: {
@@ -272,7 +295,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
     padding: 20,
-    marginTop:122,
+    marginTop: 52,
     marginBottom: -35,
   },
 
@@ -322,14 +345,13 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
 
-
-   card: {
+  card: {
     flex: 1,
     backgroundColor: "#FFF5F5",
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
     padding: 25,
-     marginBottom:-34,
+    marginBottom: -34,
     justifyContent: "center",
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 5 },
@@ -348,13 +370,12 @@ const styles = StyleSheet.create({
   },
 
   pickerContainer: {
-  borderWidth: 1,
-  borderColor: "#ccc",
-  borderRadius: 8,
-  marginBottom: 12,
-  overflow: "hidden",
-},
-
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 8,
+    marginBottom: 12,
+    overflow: "hidden",
+  },
 
   button: {
     backgroundColor: "#000",
@@ -391,17 +412,16 @@ const styles = StyleSheet.create({
   },
 
   passwordContainer: {
-  flexDirection: "row",
-  alignItems: "center",
-  backgroundColor: "#EDEDED",
-  borderRadius: 25,
-  paddingHorizontal: 16,
-  marginBottom: 14,
-},
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#EDEDED",
+    borderRadius: 25,
+    paddingHorizontal: 16,
+    marginBottom: 14,
+  },
 
-passwordInput: {
-  flex: 1,
-  paddingVertical: 14,
-},
-
+  passwordInput: {
+    flex: 1,
+    paddingVertical: 14,
+  },
 });
