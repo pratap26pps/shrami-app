@@ -14,10 +14,10 @@ export default function RootNavigator() {
 
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
-        {/* <Stack.Screen name="Tabs" component={TabNavigator} /> */}
-      
+
         <Stack.Screen name="Auth" component={AuthNavigator} />
-      
+        <Stack.Screen name="Tabs" component={TabNavigator} />
+        
     </Stack.Navigator>
   );
 }

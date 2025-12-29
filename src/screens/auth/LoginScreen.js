@@ -1,9 +1,73 @@
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, Image } from "react-native";
+import { 
+  View, 
+  Text, 
+  StyleSheet, 
+  TextInput, 
+  TouchableOpacity, 
+  Image, 
+  Alert 
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-
+import { useNavigation } from "@react-navigation/native";
+import { useState } from "react";
  
 export default function LoginScreen() {
- 
+
+ const navigation = useNavigation();
+
+  const [contactNumber, setContactNumber] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const loginhandler = async () => {
+    if (!contactNumber || contactNumber.length !== 10) {
+      return Alert.alert("Error", "Enter valid 10 digit contact number");
+    }
+
+    if (!password || password.length < 6) {
+      return Alert.alert("Error", "Password must be at least 6 characters");
+    }
+
+    try {
+      setLoading(true);
+
+      const response = await fetch(
+        "https://shrami-backend.onrender.com/api/auth/LoginHandler",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            ContactNumber: contactNumber,
+            password,
+          }),
+        }
+      );
+
+      const data = await response.json();
+      console.log("LoginHandler",data);
+      if (!response.ok || !data.success) {
+        throw new Error(data.error || "Login failed");
+      }
+
+      Alert.alert(
+        "Success",
+        "Login successful 🎉",
+        [
+          {
+            text: "OK",
+            onPress: () => navigation.replace("Tabs"),
+          },
+        ],
+        { cancelable: false }
+      );
+    } catch (error) {
+      Alert.alert("Login Failed", error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+   
  function StatBox({ text }) {
   return (
     <View style={styles.statBox}>
@@ -34,27 +98,49 @@ export default function LoginScreen() {
           placeholder="Contact no."
           style={styles.input}
           keyboardType="phone-pad"
+          maxLength={10}
+          value={contactNumber}
+          onChangeText={setContactNumber}
         />
 
         <TextInput
           placeholder="Password"
           style={styles.input}
           secureTextEntry
+          value={password}
+          onChangeText={setPassword}
         />
 
         <Text style={styles.forgot}>Forgot Password?</Text>
 
-        <TouchableOpacity style={styles.primaryBtn}>
-          <Text style={styles.primaryBtnText}>Sign In</Text>
+       <TouchableOpacity
+          style={[
+            styles.primaryBtn,
+            loading && { opacity: 0.7 },
+          ]}
+          onPress={loginhandler}
+          disabled={loading}
+        >
+          <Text style={styles.primaryBtnText}>
+            {loading ? "Signing In..." : "Sign In"}
+          </Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.googleBtn}>
-          <Image
-            source={require("../../assets/images/google.png")}
-            style={styles.googleIcon}
-          />
-          <Text style={styles.googleText}>Continue with Google</Text>
-        </TouchableOpacity>
+
+        <TouchableOpacity
+               onPress={() =>
+            Linking.openURL(
+              "https://shrami-backend.onrender.com/api/auth/google"
+            )
+          }
+                style={styles.googleBtn}>
+                  <Image
+                    source={require("../../assets/images/google.png")}
+                    style={styles.googleIcon}
+                  />
+                  <Text style={styles.googleText}>Continue with Google</Text>
+                </TouchableOpacity>
+
       </View>
     </SafeAreaView>
 

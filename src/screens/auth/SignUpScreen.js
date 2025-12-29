@@ -1,4 +1,4 @@
-import React, { useState ,useRef} from "react";
+import { useState ,useRef} from "react";
 import {
   View,
   Text,
@@ -7,26 +7,48 @@ import {
   TouchableOpacity,
   SafeAreaView,
   Image,
+  Linking,
   KeyboardAvoidingView, Platform
 } from "react-native";
+ 
+
 import { auth } from "../../services/firebase";
 import { PhoneAuthProvider, signInWithCredential } from "firebase/auth";
 import { FirebaseRecaptchaVerifierModal } from "expo-firebase-recaptcha";
+import { Picker } from "@react-native-picker/picker";
 
 export default function SignUpScreen() {
 
       const [phone, setPhone] = useState("");
       const [verificationId, setVerificationId] = useState(null);
       const [otp, setOtp] = useState("");
-    
+      const [password, setPassword] = useState("");
+      const [fullName, setFullname] = useState("");
+      const [accountType, setAccountType] = useState("");
       const recaptchaVerifier = useRef(null);
     
      const sendOTP = async () => {
       try {
+
+        if (!fullName) {
+        alert("Enter full name");
+        return;
+        }
+
+        if (!accountType) {
+        alert("Select account type");
+        return;
+        }
+
         if (!phone || phone.length !== 10) {
           alert("Enter valid 10 digit phone number");
           return;
         }
+
+        if (!password || password.length < 6) {
+         alert( "Password must be at least 6 characters")
+        };
+    
     
         const provider = new PhoneAuthProvider(auth);
     
@@ -52,11 +74,31 @@ export default function SignUpScreen() {
           const token = await result.user.getIdToken();
           console.log("Firebase Token:", token);
     
-          await fetch("http://192.168.3.7:5000/api/auth/phone-login", {
+         const response =  await fetch("https://shrami-backend.onrender.com/api/auth/SignupHandler", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ token }),
+            body: JSON.stringify({ token, fullName,  password, accountType }),
           });
+
+     const data = await response.json();
+
+    if (!response.ok || !data.success) {
+      throw new Error(data.message || "Signup failed");
+    }
+
+    // ✅ SUCCESS ALERT + NAVIGATION
+    Alert.alert(
+      "Success 🎉",
+      "Account created successfully",
+      [
+        {
+          text: "OK",
+          onPress: () => navigation.replace("Profile"),
+        },
+      ],
+      { cancelable: false }
+    );
+
         } catch (error) {
           console.log("VERIFY OTP ERROR 👉", error);
           alert(error.message);
@@ -82,9 +124,25 @@ export default function SignUpScreen() {
         firebaseConfig={auth.app.options}
       />
       
-        <TextInput placeholder="Full name" style={styles.input} />
+       <TextInput
+        placeholder="Full name"
+        style={styles.input}
+        value={fullName}
+        onChangeText={setFullname}
+        />
 
-        <TextInput placeholder="Account type" style={styles.input} />
+        <View style={styles.pickerContainer}>
+        <Picker
+            selectedValue={accountType}
+            onValueChange={(itemValue) => setAccountType(itemValue)}
+        >
+            <Picker.Item label="Select Account Type" value="" />
+            <Picker.Item label="Construction" value="Construction" />
+            <Picker.Item label="Transport" value="Transport" />
+            <Picker.Item label="House Help" value="HouseHelp" />
+        </Picker>
+        </View>
+
 
         <TextInput
           placeholder="Contact no."
@@ -94,16 +152,25 @@ export default function SignUpScreen() {
         />
  
         <TextInput
-          placeholder="Password"
-          style={styles.input}
-          secureTextEntry
+        placeholder="Password"
+        style={styles.input}
+        secureTextEntry
+        value={password}
+        onChangeText={setPassword}
         />
+
 
         <TouchableOpacity onPress={sendOTP}  style={styles.primaryBtn}>
           <Text style={styles.primaryBtnText}>Sign Up</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.googleBtn}>
+        <TouchableOpacity
+       onPress={() =>
+    Linking.openURL(
+      "https://shrami-backend.onrender.com/api/auth/google"
+    )
+  }
+        style={styles.googleBtn}>
           <Image
             source={require("../../assets/images/google.png")}
             style={styles.googleIcon}
@@ -137,7 +204,7 @@ export default function SignUpScreen() {
           <Text style={styles.buttonText}>Verify OTP</Text>
         </TouchableOpacity>
       </View>
-    </KeyboardAvoidingView>
+         </KeyboardAvoidingView>
         </>
       )}
 
@@ -155,16 +222,17 @@ const styles = StyleSheet.create({
 
   header: {
     padding: 20,
+    marginTop:80
   },
 
   title: {
     fontSize: 30,
     fontWeight: "bold",
-    color: "#000",
+    color:"#fff"
   },
 
   subtitle: {
-    color: "#000",
+    color: "#fff",
     marginTop: 4,
   },
 
@@ -193,7 +261,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
     padding: 20,
-    marginTop:112,
+    marginTop:122,
     marginBottom: -35,
   },
 
@@ -267,6 +335,15 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#333",
   },
+
+  pickerContainer: {
+  borderWidth: 1,
+  borderColor: "#ccc",
+  borderRadius: 8,
+  marginBottom: 12,
+  overflow: "hidden",
+},
+
 
   button: {
     backgroundColor: "#000",
