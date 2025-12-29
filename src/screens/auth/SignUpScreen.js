@@ -16,8 +16,9 @@ import { auth } from "../../services/firebase";
 import { PhoneAuthProvider, signInWithCredential } from "firebase/auth";
 import { FirebaseRecaptchaVerifierModal } from "expo-firebase-recaptcha";
 import { Picker } from "@react-native-picker/picker";
-
+import { Ionicons } from "@expo/vector-icons";
 export default function SignUpScreen() {
+const [showPassword, setShowPassword] = useState(false);
 
       const [phone, setPhone] = useState("");
       const [verificationId, setVerificationId] = useState(null);
@@ -151,13 +152,23 @@ export default function SignUpScreen() {
            onChangeText={setPhone}
         />
  
-        <TextInput
-        placeholder="Password"
-        style={styles.input}
-        secureTextEntry
-        value={password}
-        onChangeText={setPassword}
-        />
+   <View style={styles.passwordContainer}>
+  <TextInput
+    placeholder="Password"
+    style={styles.passwordInput}
+    secureTextEntry={!showPassword}
+    value={password}
+    onChangeText={setPassword}
+  />
+
+  <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
+    <Ionicons
+      name={showPassword ? "eye-off" : "eye"}
+      size={22}
+      color="#555"
+    />
+  </TouchableOpacity>
+</View>
 
 
         <TouchableOpacity onPress={sendOTP}  style={styles.primaryBtn}>
@@ -378,4 +389,19 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginBottom: 25,
   },
+
+  passwordContainer: {
+  flexDirection: "row",
+  alignItems: "center",
+  backgroundColor: "#EDEDED",
+  borderRadius: 25,
+  paddingHorizontal: 16,
+  marginBottom: 14,
+},
+
+passwordInput: {
+  flex: 1,
+  paddingVertical: 14,
+},
+
 });

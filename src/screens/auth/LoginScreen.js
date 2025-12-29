@@ -9,11 +9,14 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useNavigation } from "@react-navigation/native";
+import { Ionicons } from "@expo/vector-icons";
+
 import { useState } from "react";
  
 export default function LoginScreen() {
 
  const navigation = useNavigation();
+const [showPassword, setShowPassword] = useState(false);
 
   const [contactNumber, setContactNumber] = useState("");
   const [password, setPassword] = useState("");
@@ -103,15 +106,28 @@ export default function LoginScreen() {
           onChangeText={setContactNumber}
         />
 
-        <TextInput
-          placeholder="Password"
-          style={styles.input}
-          secureTextEntry
-          value={password}
-          onChangeText={setPassword}
-        />
+   <View style={styles.passwordContainer}>
+  <TextInput
+    placeholder="Password"
+    style={styles.passwordInput}
+    secureTextEntry={!showPassword}
+    value={password}
+    onChangeText={setPassword}
+  />
 
-        <Text style={styles.forgot}>Forgot Password?</Text>
+  <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
+    <Ionicons
+      name={showPassword ? "eye-off" : "eye"}
+      size={22}
+      color="#555"
+    />
+  </TouchableOpacity>
+</View>
+
+<TouchableOpacity onPress={() => navigation.navigate("ForgotPassword")}>
+  <Text style={styles.forgot}>Forgot Password?</Text>
+</TouchableOpacity>
+
 
        <TouchableOpacity
           style={[
@@ -245,5 +261,20 @@ const styles = StyleSheet.create({
   googleText: {
     fontWeight: "bold",
   },
+
+  passwordContainer: {
+  flexDirection: "row",
+  alignItems: "center",
+  backgroundColor: "#EDEDED",
+  borderRadius: 25,
+  paddingHorizontal: 16,
+  marginBottom: 14,
+},
+
+passwordInput: {
+  flex: 1,
+  paddingVertical: 14,
+},
+
 });
 
