@@ -1,16 +1,48 @@
 import { View, Text, Image, TouchableOpacity, ScrollView, StyleSheet } from "react-native";
 import { Feather } from "@expo/vector-icons";
-
+import { useNavigation } from "@react-navigation/native";
 export default function HomeScreen() {
+  const navigation = useNavigation();
+const categoryType = [
+  {
+    id: 1,
+    name: "CONSTRUCTION",
+    image: require("../../assets/images/building.png"),
+  },
+  {
+    id: 2,
+    name: "RICKSHAW",
+    image: require("../../assets/images/rickshaw.png"),
+  },
+  {
+    id: 3,
+    name: "HOUSEHELP",
+    image: require("../../assets/images/househelp.png"),
+  },
+];
+
+
+
   return (
     <ScrollView style={styles.container}>
 
       {/* Header */}
       <View style={styles.header}>
-        <Text style={styles.logo}>SHRAM!</Text>
-        <View style={styles.profileIcon}>
-          <Feather name="user" size={20} color="white" />
-        </View>
+              <Image
+               source={require("../../assets/redlogo.png")}
+               resizeMode="contain"
+               style={styles.logo}
+             />
+   <TouchableOpacity
+    style={styles.profileIcon}
+    onPress={() => navigation.navigate("Auth", { screen: "Profile" })}
+  >
+    <Image
+      source={require("../../assets/images/profile.png")}
+      resizeMode="contain"
+      style={styles.profileImage}
+    />
+  </TouchableOpacity>
       </View>
 
       {/* Search */}
@@ -19,7 +51,7 @@ export default function HomeScreen() {
           <Text style={styles.searchText}>Search labour...</Text>
         </View>
         <View style={styles.filterBtn}>
-          <Feather name="sliders" size={20} color="white" />
+          <Feather name="sliders" size={20} color="white"   style={{ transform: [{ rotate: "90deg" }] }}/>
         </View>
       </View>
 
@@ -28,11 +60,16 @@ export default function HomeScreen() {
         <Text style={styles.sectionTitle}>Popular</Text>
 
         <View style={styles.popularRow}>
-          {["CONSTRUCTION", "RICKSHAW", "HOUSEHELP"].map((item) => (
-            <View key={item} style={styles.popularItem}>
-              <View style={styles.popularIcon} />
-              <Text style={styles.popularText}>{item}</Text>
+          {categoryType.map((item) => (
+            <View key={item?.id} style={styles.popularItem}>
+             <Image
+               source={item.image}
+               resizeMode="contain"
+               style={styles.logo}
+             />
+              <Text style={styles.popularText}>{item?.name}</Text>
             </View>
+            
           ))}
         </View>
       </View>
@@ -42,7 +79,7 @@ export default function HomeScreen() {
 
       <View style={styles.topPickCard}>
         <Image
-          source={{ uri: "https://i.imgur.com/Vz81cQK.jpg" }}
+          source={require("../../assets/images/construction.png")}
           style={styles.topPickImage}
         />
         <View style={styles.topPickFooter}>
@@ -57,7 +94,11 @@ export default function HomeScreen() {
       <TouchableOpacity style={styles.makeTeamBtn}>
         <Text style={styles.makeTeamText}>MAKE LABOUR TEAM</Text>
         <View style={styles.plusBtn}>
-          <Text style={styles.plusText}>+</Text>
+         <Image
+               source={require("../../assets/images/plus.png")}
+               resizeMode="contain"
+               style={styles.logo}
+             />
         </View>
       </TouchableOpacity>
 
@@ -78,19 +119,29 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginBottom: 24,
   },
-  logo: {
-    fontSize: 24,
-    fontWeight: "bold",
-    color: "#E53935",
-  },
-  profileIcon: {
-    width: 40,
-    height: 40,
-    backgroundColor: "#E53935",
-    borderRadius: 20,
-    alignItems: "center",
-    justifyContent: "center",
-  },
+logo: {
+  width: 140,
+  height: 60,
+  alignSelf: "center",
+  marginBottom:3
+},
+
+profileIcon: {
+  width: 54,
+  height: 57,
+  backgroundColor: "#FDECEC",
+  borderRadius: 21,
+  borderWidth: 1.5,
+  borderColor: "#E53935",
+  alignItems: "center",
+  justifyContent: "center",
+  elevation: 2,          // Android shadow
+  shadowColor: "#000",   // iOS shadow
+  shadowOffset: { width: 0, height: 1 },
+  shadowOpacity: 0.15,
+  shadowRadius: 2,
+},
+
   searchRow: {
     flexDirection: "row",
     alignItems: "center",
@@ -146,7 +197,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   popularText: {
-    fontSize: 12,
+    fontSize: 10,
     fontWeight: "600",
     textAlign: "center",
   },
@@ -192,7 +243,7 @@ const styles = StyleSheet.create({
   plusBtn: {
     width: 40,
     height: 40,
-    backgroundColor: "#E53935",
+    marginTop:10,
     borderRadius: 20,
     alignItems: "center",
     justifyContent: "center",

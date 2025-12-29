@@ -124,7 +124,7 @@ export default function SignUpScreen() {
       </View>
 
       <View style={styles.header}>
-        <Text style={styles.title}>Sign Up</Text>
+        <Text style={styles.title}    onPress={() => navigation.navigate("Tabs")}>Sign Up</Text>
         <Text style={styles.subtitle}>
           Sign in if already having an account
         </Text>

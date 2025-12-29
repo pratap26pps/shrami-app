@@ -5,13 +5,21 @@ export default function ProfileScreen() {
   return (
     <View style={styles.container}>
 
-      {/* Header */}
-      <View style={styles.header}>
-        <Text style={styles.logo}>SHRAM!</Text>
-        <View style={styles.profileIcon}>
-          <Feather name="user" size={20} color="white" />
-        </View>
-      </View>
+           {/* Header */}
+           <View style={styles.header}>
+                   <Image
+                    source={require("../../assets/redlogo.png")}
+                    resizeMode="contain"
+                    style={styles.logo}
+                  />
+             <View style={styles.profileIcon}>
+                  <Image
+                    source={require("../../assets/images/profile.png")}
+                    resizeMode="contain"
+                    style={styles.logo}
+                  />
+             </View>
+           </View>
 
       {/* Profile */}
       <View style={styles.profileSection}>
@@ -62,13 +70,21 @@ const styles = StyleSheet.create({
     color: "#E53935",
   },
   profileIcon: {
-    width: 40,
-    height: 40,
-    backgroundColor: "#E53935",
-    borderRadius: 20,
-    alignItems: "center",
-    justifyContent: "center",
-  },
+  width: 54,
+  height: 57,
+  backgroundColor: "#FDECEC",
+  borderRadius: 21,
+  borderWidth: 1.5,
+  borderColor: "#E53935",
+  alignItems: "center",
+  justifyContent: "center",
+  elevation: 2,          // Android shadow
+  shadowColor: "#000",   // iOS shadow
+  shadowOffset: { width: 0, height: 1 },
+  shadowOpacity: 0.15,
+  shadowRadius: 2,
+},
+
   profileSection: {
     alignItems: "center",
     marginBottom: 40,
