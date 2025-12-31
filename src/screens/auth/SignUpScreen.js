@@ -251,7 +251,7 @@ const styles = StyleSheet.create({
     color: "#000",
     justifyContent: "space-between",
     margin: 8,
-    marginTop: 50,
+    marginTop:Platform.OS === "ios" ? 0 :  50,
   },
   Register: {
     fontSize: 20,
@@ -369,12 +369,13 @@ const styles = StyleSheet.create({
     color: "#333",
   },
 
-  pickerContainer: {
-    borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 8,
-    marginBottom: 12,
-    overflow: "hidden",
+ pickerContainer: {
+    borderWidth: Platform.OS === "ios" ? 0 : 1,
+    borderColor: Platform.OS === "ios" ? "transparent" : "#ccc",
+    borderRadius: Platform.OS === "ios" ? 0 : 8,
+    marginBottom: Platform.OS === "ios" ? 0 : 12,
+    marginTop: Platform.OS === "ios" ? -34 : 12,
+    overflow: Platform.OS === "ios" ? "visible" : "hidden",
   },
 
   button: {

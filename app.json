@@ -2,6 +2,9 @@
   "expo": {
     "name": "shrami",
     "slug": "shrami",
-      "scheme": "myapp"
+    "scheme": "myapp",
+    "plugins": [
+      "expo-secure-store"
+    ]
   }
 }
