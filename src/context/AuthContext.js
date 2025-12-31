@@ -1,41 +1,56 @@
 import React, { createContext, useEffect, useState } from "react";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as SecureStore from "expo-secure-store";
 
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
+  const [token, setToken] = useState(null);
+  const [googleProfile, setGoogleProfile] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  /* Load token on app start */
   useEffect(() => {
-    const loadUser = async () => {
+    const loadToken = async () => {
       try {
-        const storedUser = await AsyncStorage.getItem("user");
-        if (storedUser) {
-          setUser(JSON.parse(storedUser));
+        const storedToken = await SecureStore.getItemAsync("token");
+        if (storedToken) {
+          setToken(storedToken);
         }
-      } catch (e) {
-        console.log("Failed to load user");
+      } catch (err) {
+        console.log("Token load failed");
       } finally {
         setLoading(false);
       }
     };
 
-    loadUser();
+    loadToken();
   }, []);
 
-  const login = async (userData) => {
-    setUser(userData);
-    await AsyncStorage.setItem("user", JSON.stringify(userData));
+  /* Existing user login */
+  const loginWithToken = async (jwt) => {
+    await SecureStore.setItemAsync("token", jwt);
+    setToken(jwt);
+    setGoogleProfile(null);
   };
 
+  /* Logout */
   const logout = async () => {
-    setUser(null);
-    await AsyncStorage.removeItem("user");
+    await SecureStore.deleteItemAsync("token");
+    setToken(null);
+    setGoogleProfile(null);
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, logout }}>
+    <AuthContext.Provider
+      value={{
+        token,
+        googleProfile,
+        setGoogleProfile,
+        loginWithToken,
+        logout,
+        loading,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

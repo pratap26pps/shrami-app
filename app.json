@@ -1,6 +1,7 @@
 {
   "expo": {
     "name": "shrami",
-    "slug": "shrami"
+    "slug": "shrami",
+      "scheme": "myapp"
   }
 }
