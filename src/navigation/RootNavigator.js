@@ -16,7 +16,7 @@ export default function RootNavigator() {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       {/* Logged in user */}
-      {!token && (
+      {token && (
         <Stack.Screen name="Tabs" component={TabNavigator} />
       )}
 

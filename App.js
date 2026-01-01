@@ -38,10 +38,28 @@ function DeepLinkHandler() {
   return null;
 }
 
+
+const linking = {
+  prefixes: ["shrami://"],
+  config: {
+    screens: {
+      Tabs: {
+        screens: {
+          Home: "home",
+          Search: "search",
+          Cart: "cart",
+          Setting: "setting",
+        },
+      },
+      AuthSuccess: "auth-success",
+    },
+  },
+};
+
 export default function App() {
   return (
     <AuthProvider>
-      <NavigationContainer>
+      <NavigationContainer linking={linking}>
         <DeepLinkHandler />
         <RootNavigator />
       </NavigationContainer>
