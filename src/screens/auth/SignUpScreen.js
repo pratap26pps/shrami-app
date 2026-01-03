@@ -20,13 +20,14 @@ import { Picker } from "@react-native-picker/picker";
 import { Ionicons } from "@expo/vector-icons";
 export default function SignUpScreen() {
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const navigation = useNavigation();
   const [phone, setPhone] = useState("");
   const [verificationId, setVerificationId] = useState(null);
   const [otp, setOtp] = useState("");
   const [password, setPassword] = useState("");
+  const [ConfirmPassword, setConfirmPassword] = useState("");
   const [fullName, setFullname] = useState("");
-  const [accountType, setAccountType] = useState("");
   const recaptchaVerifier = useRef(null);
 
   const sendOTP = async () => {
@@ -35,11 +36,7 @@ export default function SignUpScreen() {
         alert("Enter full name");
         return;
       }
-
-      if (!accountType) {
-        alert("Select account type");
-        return;
-      }
+ 
 
       if (!phone || phone.length !== 10) {
         alert("Enter valid 10 digit phone number");
@@ -48,6 +45,12 @@ export default function SignUpScreen() {
 
       if (!password || password.length < 6) {
         alert("Password must be at least 6 characters");
+        return;
+      }
+
+      if(password !== ConfirmPassword){
+        alert("Password do not match");
+        return;
       }
 
       const provider = new PhoneAuthProvider(auth);
@@ -78,7 +81,7 @@ export default function SignUpScreen() {
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ token, fullName, password, accountType }),
+          body: JSON.stringify({ token, fullName, password }),
         }
       );
 
@@ -111,7 +114,7 @@ export default function SignUpScreen() {
       <View style={styles.nevbar}>
         <Ionicons
           onPress={() => navigation.navigate("Welcome")}
-          name="arrow-back"
+          name="arrow-back" 
           size={26}
           color="#555"
         />
@@ -133,6 +136,7 @@ export default function SignUpScreen() {
       {!verificationId ? (
         <View style={styles.form}>
           <FirebaseRecaptchaVerifierModal
+
             ref={recaptchaVerifier}
             firebaseConfig={auth.app.options}
           />
@@ -143,19 +147,7 @@ export default function SignUpScreen() {
             value={fullName}
             onChangeText={setFullname}
           />
-
-          <View style={styles.pickerContainer}>
-            <Picker
-              selectedValue={accountType}
-              onValueChange={(itemValue) => setAccountType(itemValue)}
-            >
-              <Picker.Item label="Select Account Type" value="" />
-              <Picker.Item label="Construction" value="Construction" />
-              <Picker.Item label="Transport" value="Transport" />
-              <Picker.Item label="House Help" value="HouseHelp" />
-            </Picker>
-          </View>
-
+          
           <TextInput
             placeholder="Contact no."
             style={styles.input}
@@ -175,6 +167,23 @@ export default function SignUpScreen() {
             <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
               <Ionicons
                 name={showPassword ? "eye-off" : "eye"}
+                size={22}
+                color="#555"
+              />
+            </TouchableOpacity>
+          </View>
+           <View style={styles.passwordContainer}>
+            <TextInput
+              placeholder="Confirm Password"
+              style={styles.passwordInput}
+              secureTextEntry={!showConfirmPassword}
+              value={ConfirmPassword}
+              onChangeText={setConfirmPassword}
+            />
+
+            <TouchableOpacity onPress={() => setShowConfirmPassword(!showConfirmPassword)}>
+              <Ionicons
+                name={showConfirmPassword ? "eye-off" : "eye"}
                 size={22}
                 color="#555"
               />

@@ -5,6 +5,12 @@
     "scheme": "shrami",
     "plugins": [
       "expo-secure-store"
-    ]
+    ],
+    "android": {
+      "package": "com.pratap26pps.shrami"
+    },
+    "ios": {
+      "bundleIdentifier": "com.pratap26pps.shrami"
+    }
   }
 }

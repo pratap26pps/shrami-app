@@ -4,25 +4,22 @@ import { AuthContext } from "../context/AuthContext";
 
 import AuthNavigator from "./AuthNavigator";
 import TabNavigator from "./TabNavigator";
-// import Loader from "../components/Loader";
+import Loader from "../components/Loader";
 
 const Stack = createNativeStackNavigator();
 
 export default function RootNavigator() {
   const { token, googleProfile, loading } = useContext(AuthContext);
 
-  // if (loading) return <Loader />;
+  if (loading) return <Loader />;
 
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
-      {/* Logged in user */}
-      {token && (
+           {/* ✅ Logged in user */}
+      {token? (
         <Stack.Screen name="Tabs" component={TabNavigator} />
-      )}
-
- 
-      {/* Not logged in */}
-      {!token && !googleProfile && (
+      ) : (
+        // ✅ ALWAYS render Auth when not logged in
         <Stack.Screen name="Auth" component={AuthNavigator} />
       )}
     </Stack.Navigator>
