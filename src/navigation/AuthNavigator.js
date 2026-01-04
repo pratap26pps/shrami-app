@@ -5,7 +5,7 @@ import WelcomeScreen from "../screens/WelcomeScreen";
 import SignUpScreen from "../screens/auth/SignUpScreen";
 import ForgotPasswordScreen from "../screens/auth/ForgotPasswordScreen";
 import ResetPasswordScreen from "../screens/auth/ResetPasswordScreen";
-import ProfileScreen from "../screens/home/ProfileScreen";
+ 
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 const Stack = createNativeStackNavigator();
@@ -21,11 +21,9 @@ export default function AuthNavigator() {
       ) : (
         <Stack.Screen name="Signup" component={SignUpScreen} />
       )}
-      <Stack.Screen name="Signup" component={SignUpScreen} />
       <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
       <Stack.Screen name="ResetPassword" component={ResetPasswordScreen} />
-
-      <Stack.Screen name="Profile" component={ProfileScreen} />
+ 
     </Stack.Navigator>
   );
 }

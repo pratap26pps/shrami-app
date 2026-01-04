@@ -3,6 +3,8 @@ import { Image } from "react-native";
 
 import HomeScreen from "../screens/home/HomeScreen";
  import WorkerListScreen from "../screens/home/SearchScreen";
+ import ProfileScreen from "../screens/home/ProfileScreen";
+ import CheckoutScreen from "../screens/contractorAction/cart";
  
 const Tab = createBottomTabNavigator();
 
@@ -19,10 +21,11 @@ const TAB_ICONS = {
     inactive: require("../assets/images/cart.png"),
     active: require("../assets/images/cart.png"),
   },
-  Setting: {
+   Profile: {
     inactive: require("../assets/images/setting.png"),
     active: require("../assets/images/setting.png"),
   }, 
+  
 };
 
 export default function TabNavigator() {
@@ -53,10 +56,8 @@ export default function TabNavigator() {
     >
       <Tab.Screen name="Home" component={HomeScreen} />
       <Tab.Screen name="Search" component={WorkerListScreen} />
-      <Tab.Screen name="Cart" component={WorkerListScreen} />
-      <Tab.Screen name="Setting" component={WorkerListScreen} />
-   
-      
+      <Tab.Screen name="Cart" component={CheckoutScreen } />
+      <Tab.Screen name="Profile" component={ProfileScreen} />
     </Tab.Navigator>
   );
 }

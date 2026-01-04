@@ -28,7 +28,7 @@ export default function WorkerListScreen({ navigation }) {
       <Text style={styles.heading}>Cleaning</Text>
 
       {workers.map((item, index) => (
-        <View key={index} style={styles.card}>
+        <View key={index} style={styles.card} >
           <Image source={item.image} style={styles.avatar} />
 
           <View style={{ flex: 1 }}>
@@ -38,7 +38,7 @@ export default function WorkerListScreen({ navigation }) {
           </View>
 
           <TouchableOpacity
-            onPress={() => navigation.navigate("WorkerDetails")}
+                onPress={() => navigation.navigate("WorkerScreen")}
           >
             <Text style={styles.details}>DETAILS</Text>
           </TouchableOpacity>

@@ -3,29 +3,10 @@ import { Feather } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 export default function HomeScreen() {
   const navigation = useNavigation();
-const categoryType = [
-  {
-    id: 1,
-    name: "CONSTRUCTION",
-    image: require("../../assets/images/building.png"),
-  },
-  {
-    id: 2,
-    name: "RICKSHAW",
-    image: require("../../assets/images/rickshaw.png"),
-  },
-  {
-    id: 3,
-    name: "HOUSEHELP",
-    image: require("../../assets/images/househelp.png"),
-  },
-];
-
-
-
+ 
   return (
     <ScrollView style={styles.container}>
-
+        
       {/* Header */}
       <View style={styles.header}>
               <Image
@@ -51,31 +32,15 @@ const categoryType = [
           <Text style={styles.searchText}>Search labour...</Text>
         </View>
         <View style={styles.filterBtn}>
-          <Feather name="sliders" size={20} color="white"   style={{ transform: [{ rotate: "90deg" }] }}/>
+          <Feather name="sliders" size={20} color="white" 
+            style={{ transform: [{ rotate: "90deg" }] }}/>
         </View>
       </View>
 
-      {/* Popular */}
-      <View style={styles.card}>
-        <Text style={styles.sectionTitle}>Popular</Text>
-
-        <View style={styles.popularRow}>
-          {categoryType.map((item) => (
-            <View key={item?.id} style={styles.popularItem}>
-             <Image
-               source={item.image}
-               resizeMode="contain"
-               style={styles.logo}
-             />
-              <Text style={styles.popularText}>{item?.name}</Text>
-            </View>
-            
-          ))}
-        </View>
-      </View>
+     
 
       {/* Top Picks */}
-      <Text style={styles.sectionTitle}>Top Picks</Text>
+      <Text style={styles.sectionTitle}> Construction</Text>
 
       <View style={styles.topPickCard}>
         <Image
@@ -90,17 +55,20 @@ const categoryType = [
         </View>
       </View>
 
-      {/* Make Labour Team */}
-      <TouchableOpacity style={styles.makeTeamBtn}>
-        <Text style={styles.makeTeamText}>MAKE LABOUR TEAM</Text>
-        <View style={styles.plusBtn}>
-         <Image
-               source={require("../../assets/images/plus.png")}
-               resizeMode="contain"
-               style={styles.logo}
-             />
+   {/* Top Picks */}
+      <Text style={styles.sectionTitle}>electrical</Text>
+   <View style={styles.topPickCard}>
+        <Image
+          source={require("../../assets/images/construction.png")}
+          style={styles.topPickImage}
+        />
+        <View style={styles.topPickFooter}>
+          <Text style={styles.topPickText}>
+            Labour <Text style={styles.grayText}>(मजदूर)</Text>
+          </Text>
+          <Feather name="arrow-right" size={22} color="#E53935" />
         </View>
-      </TouchableOpacity>
+      </View>
 
     </ScrollView>
   );

@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef,useContext } from "react";
 import {
   View,
   Text,
@@ -8,20 +8,21 @@ import {
   SafeAreaView,
   Image,
   Linking,
+  Alert,
   KeyboardAvoidingView,
   Platform,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-
+import { AuthContext } from "../../context/AuthContext";
 import { auth } from "../../services/firebase";
 import { PhoneAuthProvider, signInWithCredential } from "firebase/auth";
 import { FirebaseRecaptchaVerifierModal } from "expo-firebase-recaptcha";
-import { Picker } from "@react-native-picker/picker";
 import { Ionicons } from "@expo/vector-icons";
 export default function SignUpScreen() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const navigation = useNavigation();
+  const { loginWithToken } = useContext(AuthContext);
   const [phone, setPhone] = useState("");
   const [verificationId, setVerificationId] = useState(null);
   const [otp, setOtp] = useState("");
@@ -32,26 +33,14 @@ export default function SignUpScreen() {
 
   const sendOTP = async () => {
     try {
-      if (!fullName) {
-        alert("Enter full name");
-        return;
-      }
- 
-
-      if (!phone || phone.length !== 10) {
-        alert("Enter valid 10 digit phone number");
-        return;
-      }
-
-      if (!password || password.length < 6) {
-        alert("Password must be at least 6 characters");
-        return;
-      }
-
-      if(password !== ConfirmPassword){
-        alert("Password do not match");
-        return;
-      }
+       
+      if (!fullName) return Alert.alert("Error", "Enter full name");
+      if (phone.length !== 10)
+        return Alert.alert("Error", "Enter valid phone number");
+      if (password.length < 6)
+        return Alert.alert("Error", "Password must be at least 6 characters");
+      if (password !== ConfirmPassword)
+        return Alert.alert("Error", "Passwords do not match");
 
       const provider = new PhoneAuthProvider(auth);
 
@@ -70,6 +59,8 @@ export default function SignUpScreen() {
 
   const verifyOTP = async () => {
     try {
+      if (!otp || otp.length < 6)
+        return Alert.alert("Error", "Enter valid OTP");
       const credential = PhoneAuthProvider.credential(verificationId, otp);
       const result = await signInWithCredential(auth, credential);
 
@@ -90,19 +81,10 @@ export default function SignUpScreen() {
       if (!response.ok || !data.success) {
         throw new Error(data.message || "Signup failed");
       }
-
+         // ✅ STORE TOKEN → ROOT NAVIGATOR OPENS TABS
+      await loginWithToken(data.token);
       // ✅ SUCCESS ALERT + NAVIGATION
-      Alert.alert(
-        "Success 🎉",
-        "Account created successfully",
-        [
-          {
-            text: "OK",
-            onPress: () => navigation.replace("Profile"),
-          },
-        ],
-        { cancelable: false }
-      );
+      Alert.alert("Success 🎉", "Account created successfully");
     } catch (error) {
       console.log("VERIFY OTP ERROR 👉", error);
       alert(error.message);
@@ -127,7 +109,7 @@ export default function SignUpScreen() {
       </View>
 
       <View style={styles.header}>
-        <Text style={styles.title}    onPress={() => navigation.navigate("Tabs")}>Sign Up</Text>
+        <Text style={styles.title} >Sign Up</Text>
         <Text style={styles.subtitle}>
           Sign in if already having an account
         </Text>
