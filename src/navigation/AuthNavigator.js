@@ -16,11 +16,11 @@ export default function AuthNavigator() {
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="Splash" component={SplashScreen} />
       <Stack.Screen name="Welcome" component={WelcomeScreen} />
-      {!googleProfile ? (
+     
         <Stack.Screen name="Login" component={LoginScreen} />
-      ) : (
+  
         <Stack.Screen name="Signup" component={SignUpScreen} />
-      )}
+ 
       <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
       <Stack.Screen name="ResetPassword" component={ResetPasswordScreen} />
  
