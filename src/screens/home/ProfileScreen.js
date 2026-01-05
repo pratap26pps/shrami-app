@@ -9,15 +9,15 @@ export default function ProfileScreen() {
   const logouthandler = async () => {
     try {
       // Optional backend logout (recommended)
-      await fetch(
-        "https://shrami-backend.onrender.com/api/auth/LogoutHandler",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      // await fetch(
+      //   "https://shrami-backend.onrender.com/api/auth/LogoutHandler",
+      //   {
+      //     method: "POST",
+      //     headers: {
+      //       "Content-Type": "application/json",
+      //     },
+      //   }
+      // );
 
       // ✅ Clear token from SecureStore + Context
       await logout();
