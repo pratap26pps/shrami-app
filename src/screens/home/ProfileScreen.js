@@ -4,7 +4,7 @@ import { useContext } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import { useNavigation } from "@react-navigation/native";
 export default function ProfileScreen() {
-  const { logout } = useContext(AuthContext);
+  const { logout,user } = useContext(AuthContext);
     const navigation = useNavigation();
   const logouthandler = async () => {
     try {
@@ -38,12 +38,7 @@ export default function ProfileScreen() {
           style={styles.logo}
         />
         <TouchableOpacity style={styles.profileIcon} onPress={logouthandler}>
-          {/* <Image
-                    source={require("../../assets/images/profile.png")}
-                    resizeMode="contain"
-                    style={styles.logo}
-                  /> */}
-          <Text>logo</Text>
+          <Text>logout</Text>
         </TouchableOpacity>
       </View>
 
@@ -53,7 +48,8 @@ export default function ProfileScreen() {
           source={{ uri: "https://i.imgur.com/8Km9tLL.jpg" }}
           style={styles.avatar}
         />
-        <Text style={styles.name}>Name</Text>
+        <Text style={styles.name}>{user?.fullName}</Text>
+        <Text style={styles.verified}>{user?.ContactNumber}</Text>
         <Text style={styles.verified}>Verified</Text>
       </View>
 

@@ -61,14 +61,16 @@ const categoryType = [
 
         <View style={styles.popularRow}>
           {categoryType.map((item) => (
-            <View key={item?.id} style={styles.popularItem}>
+            <TouchableOpacity key={item?.id} style={styles.popularItem}  onPress={() =>
+    navigation.navigate("LabourJob", { type: item?.name })
+  }>
              <Image
                source={item.image}
                resizeMode="contain"
                style={styles.logo}
              />
               <Text style={styles.popularText}>{item?.name}</Text>
-            </View>
+            </TouchableOpacity>
             
           ))}
         </View>

@@ -12,6 +12,10 @@ import { useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 
 import { useState } from "react";
+import { useContext } from "react";
+import { AuthContext } from "../../context/AuthContext";
+
+
 
 export default function LoginScreen() {
   const navigation = useNavigation();
@@ -20,6 +24,7 @@ export default function LoginScreen() {
   const [contactNumber, setContactNumber] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const { loginWithToken } = useContext(AuthContext);
 
   const loginhandler = async () => {
     if (!contactNumber || contactNumber.length !== 10) {
@@ -50,17 +55,12 @@ export default function LoginScreen() {
       if (!response.ok || !data.success) {
         throw new Error(data.error || "Login failed");
       }
+          // ✅ THIS LINE WAS MISSING
+       await loginWithToken(data.token,data.user);
 
       Alert.alert(
         "Success",
-        "Login successful 🎉",
-        [
-          {
-            text: "OK",
-            onPress: () => navigation.replace("Tabs"),
-          },
-        ],
-        { cancelable: false }
+        "Login successful 🎉"
       );
     } catch (error) {
       Alert.alert("Login Failed", error.message);
