@@ -1,25 +1,46 @@
-import { View, Text, Image, StyleSheet } from "react-native";
-import { Feather } from "@expo/vector-icons";
-
+import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
+import { Alert } from "react-native";
+import { useContext } from "react";
+import { AuthContext } from "../../context/AuthContext";
+import { useNavigation } from "@react-navigation/native";
 export default function ProfileScreen() {
+  const { logout,user } = useContext(AuthContext);
+    const navigation = useNavigation();
+  const logouthandler = async () => {
+    try {
+      // Optional backend logout (recommended)
+      // await fetch(
+      //   "https://shrami-backend.onrender.com/api/auth/LogoutHandler",
+      //   {
+      //     method: "POST",
+      //     headers: {
+      //       "Content-Type": "application/json",
+      //     },
+      //   }
+      // );
+
+      // ✅ Clear token from SecureStore + Context
+      await logout();
+
+      Alert.alert("Logged out", "You have been logged out successfully");
+    } catch (error) {
+      console.log("LOGOUT ERROR 👉", error.message);
+      Alert.alert("Error", "Logout failed");
+    }
+  };
   return (
     <View style={styles.container}>
-
-           {/* Header */}
-           <View style={styles.header}>
-                   <Image
-                    source={require("../../assets/redlogo.png")}
-                    resizeMode="contain"
-                    style={styles.logo}
-                  />
-             <View style={styles.profileIcon}>
-                  <Image
-                    source={require("../../assets/images/profile.png")}
-                    resizeMode="contain"
-                    style={styles.logo}
-                  />
-             </View>
-           </View>
+      {/* Header */}
+      <View style={styles.header}>
+        <Image
+          source={require("../../assets/redlogo.png")}
+          resizeMode="contain"
+          style={styles.logo}
+        />
+        <TouchableOpacity style={styles.profileIcon} onPress={logouthandler}>
+          <Text>logout</Text>
+        </TouchableOpacity>
+      </View>
 
       {/* Profile */}
       <View style={styles.profileSection}>
@@ -27,7 +48,8 @@ export default function ProfileScreen() {
           source={{ uri: "https://i.imgur.com/8Km9tLL.jpg" }}
           style={styles.avatar}
         />
-        <Text style={styles.name}>Name</Text>
+        <Text style={styles.name}>{user?.fullName}</Text>
+        <Text style={styles.verified}>{user?.ContactNumber}</Text>
         <Text style={styles.verified}>Verified</Text>
       </View>
 
@@ -36,17 +58,49 @@ export default function ProfileScreen() {
         {[1, 2, 3, 4].map((i) => (
           <View key={i} style={styles.card}>
             {i === 1 && (
-              <>
-                <View style={styles.cartIcon}>
-                  <Feather name="shopping-cart" size={22} color="white" />
-                </View>
+              <TouchableOpacity     onPress={() => navigation.navigate("CheckoutScreen")}>
+                <Image
+                  source={require("../../assets/images/cart.png")}
+                  resizeMode="contain"
+                  style={styles.logo}
+                />
+
                 <Text style={styles.cardText}>Cart</Text>
-              </>
+              </TouchableOpacity>
+            )}
+            {i === 2 && (
+              <TouchableOpacity onPress={() => navigation.navigate("Payment")}>
+                <Image
+                  source={require("../../assets/images/payments.png")}
+                  resizeMode="contain"
+                  style={styles.logo}
+                />
+                <Text style={styles.cardText}>Payments</Text>
+              </TouchableOpacity>
+            )}
+            {i === 3 && (
+              <TouchableOpacity onPress={() => navigation.navigate("Worker")}>
+                <Image
+                  source={require("../../assets/images/workstatus.png")}
+                  resizeMode="contain"
+                  style={styles.logo}
+                />
+                <Text style={styles.cardText}>Work Status</Text>
+              </TouchableOpacity>
+            )}
+            {i === 4 && (
+              <TouchableOpacity   onPress={() => navigation.navigate("Worker")}>
+                <Image
+                  source={require("../../assets/images/hired.png")}
+                  resizeMode="contain"
+                  style={styles.logo}
+                />
+                <Text style={styles.cardText}>Hired</Text>
+              </TouchableOpacity>
             )}
           </View>
         ))}
       </View>
-
     </View>
   );
 }
@@ -70,20 +124,20 @@ const styles = StyleSheet.create({
     color: "#E53935",
   },
   profileIcon: {
-  width: 54,
-  height: 57,
-  backgroundColor: "#FDECEC",
-  borderRadius: 21,
-  borderWidth: 1.5,
-  borderColor: "#E53935",
-  alignItems: "center",
-  justifyContent: "center",
-  elevation: 2,          // Android shadow
-  shadowColor: "#000",   // iOS shadow
-  shadowOffset: { width: 0, height: 1 },
-  shadowOpacity: 0.15,
-  shadowRadius: 2,
-},
+    width: 54,
+    height: 57,
+    backgroundColor: "#FDECEC",
+    borderRadius: 21,
+    borderWidth: 1.5,
+    borderColor: "#E53935",
+    alignItems: "center",
+    justifyContent: "center",
+    elevation: 2, // Android shadow
+    shadowColor: "#000", // iOS shadow
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.15,
+    shadowRadius: 2,
+  },
 
   profileSection: {
     alignItems: "center",

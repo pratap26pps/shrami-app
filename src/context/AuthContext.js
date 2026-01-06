@@ -4,9 +4,11 @@ import * as SecureStore from "expo-secure-store";
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
+
   const [token, setToken] = useState(null);
   const [googleProfile, setGoogleProfile] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState(null);
 
   /* Load token on app start */
   useEffect(() => {
@@ -27,9 +29,10 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   /* Existing user login */
-  const loginWithToken = async (jwt) => {
+  const loginWithToken = async (jwt,userData) => {
     await SecureStore.setItemAsync("token", jwt);
     setToken(jwt);
+     setUser(userData);
     setGoogleProfile(null);
   };
 
@@ -44,6 +47,7 @@ export const AuthProvider = ({ children }) => {
     <AuthContext.Provider
       value={{
         token,
+        user,
         googleProfile,
         setGoogleProfile,
         loginWithToken,

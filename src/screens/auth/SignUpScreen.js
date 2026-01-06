@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef,useContext } from "react";
 import {
   View,
   Text,
@@ -8,47 +8,39 @@ import {
   SafeAreaView,
   Image,
   Linking,
+  Alert,
   KeyboardAvoidingView,
   Platform,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-
+import { AuthContext } from "../../context/AuthContext";
 import { auth } from "../../services/firebase";
 import { PhoneAuthProvider, signInWithCredential } from "firebase/auth";
 import { FirebaseRecaptchaVerifierModal } from "expo-firebase-recaptcha";
-import { Picker } from "@react-native-picker/picker";
 import { Ionicons } from "@expo/vector-icons";
 export default function SignUpScreen() {
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const navigation = useNavigation();
+  const { loginWithToken } = useContext(AuthContext);
   const [phone, setPhone] = useState("");
   const [verificationId, setVerificationId] = useState(null);
   const [otp, setOtp] = useState("");
   const [password, setPassword] = useState("");
+  const [ConfirmPassword, setConfirmPassword] = useState("");
   const [fullName, setFullname] = useState("");
-  const [accountType, setAccountType] = useState("");
   const recaptchaVerifier = useRef(null);
 
   const sendOTP = async () => {
     try {
-      if (!fullName) {
-        alert("Enter full name");
-        return;
-      }
-
-      if (!accountType) {
-        alert("Select account type");
-        return;
-      }
-
-      if (!phone || phone.length !== 10) {
-        alert("Enter valid 10 digit phone number");
-        return;
-      }
-
-      if (!password || password.length < 6) {
-        alert("Password must be at least 6 characters");
-      }
+       
+      if (!fullName) return Alert.alert("Error", "Enter full name");
+      if (phone.length !== 10)
+        return Alert.alert("Error", "Enter valid phone number");
+      if (password.length < 6)
+        return Alert.alert("Error", "Password must be at least 6 characters");
+      if (password !== ConfirmPassword)
+        return Alert.alert("Error", "Passwords do not match");
 
       const provider = new PhoneAuthProvider(auth);
 
@@ -67,6 +59,8 @@ export default function SignUpScreen() {
 
   const verifyOTP = async () => {
     try {
+      if (!otp || otp.length < 6)
+        return Alert.alert("Error", "Enter valid OTP");
       const credential = PhoneAuthProvider.credential(verificationId, otp);
       const result = await signInWithCredential(auth, credential);
 
@@ -78,7 +72,7 @@ export default function SignUpScreen() {
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ token, fullName, password, accountType }),
+          body: JSON.stringify({ token, fullName, password }),
         }
       );
 
@@ -87,19 +81,10 @@ export default function SignUpScreen() {
       if (!response.ok || !data.success) {
         throw new Error(data.message || "Signup failed");
       }
-
+         // ✅ STORE TOKEN → ROOT NAVIGATOR OPENS TABS
+      await loginWithToken(data.token);
       // ✅ SUCCESS ALERT + NAVIGATION
-      Alert.alert(
-        "Success 🎉",
-        "Account created successfully",
-        [
-          {
-            text: "OK",
-            onPress: () => navigation.replace("Profile"),
-          },
-        ],
-        { cancelable: false }
-      );
+      Alert.alert("Success 🎉", "Account created successfully");
     } catch (error) {
       console.log("VERIFY OTP ERROR 👉", error);
       alert(error.message);
@@ -111,7 +96,7 @@ export default function SignUpScreen() {
       <View style={styles.nevbar}>
         <Ionicons
           onPress={() => navigation.navigate("Welcome")}
-          name="arrow-back"
+          name="arrow-back" 
           size={26}
           color="#555"
         />
@@ -124,7 +109,7 @@ export default function SignUpScreen() {
       </View>
 
       <View style={styles.header}>
-        <Text style={styles.title}    onPress={() => navigation.navigate("Tabs")}>Sign Up</Text>
+        <Text style={styles.title} >Sign Up</Text>
         <Text style={styles.subtitle}>
           Sign in if already having an account
         </Text>
@@ -133,6 +118,7 @@ export default function SignUpScreen() {
       {!verificationId ? (
         <View style={styles.form}>
           <FirebaseRecaptchaVerifierModal
+
             ref={recaptchaVerifier}
             firebaseConfig={auth.app.options}
           />
@@ -143,19 +129,7 @@ export default function SignUpScreen() {
             value={fullName}
             onChangeText={setFullname}
           />
-
-          <View style={styles.pickerContainer}>
-            <Picker
-              selectedValue={accountType}
-              onValueChange={(itemValue) => setAccountType(itemValue)}
-            >
-              <Picker.Item label="Select Account Type" value="" />
-              <Picker.Item label="Construction" value="Construction" />
-              <Picker.Item label="Transport" value="Transport" />
-              <Picker.Item label="House Help" value="HouseHelp" />
-            </Picker>
-          </View>
-
+          
           <TextInput
             placeholder="Contact no."
             style={styles.input}
@@ -175,6 +149,23 @@ export default function SignUpScreen() {
             <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
               <Ionicons
                 name={showPassword ? "eye-off" : "eye"}
+                size={22}
+                color="#555"
+              />
+            </TouchableOpacity>
+          </View>
+           <View style={styles.passwordContainer}>
+            <TextInput
+              placeholder="Confirm Password"
+              style={styles.passwordInput}
+              secureTextEntry={!showConfirmPassword}
+              value={ConfirmPassword}
+              onChangeText={setConfirmPassword}
+            />
+
+            <TouchableOpacity onPress={() => setShowConfirmPassword(!showConfirmPassword)}>
+              <Ionicons
+                name={showConfirmPassword ? "eye-off" : "eye"}
                 size={22}
                 color="#555"
               />

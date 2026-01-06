@@ -7,7 +7,7 @@ import {
   StyleSheet,
 } from "react-native";
 
-export default function WorkerDetails() {
+export default function WorkerScreen() {
   return (
     <ScrollView style={detail.container}>
       <View style={detail.profileCard}>
@@ -25,17 +25,25 @@ export default function WorkerDetails() {
       </View>
 
       {/* Stats */}
-      <View style={detail.statsRow}>
-        <View style={detail.statCircle}>
-          <Text style={detail.statText}>7+</Text>
-          <Text style={detail.statSub}>EXP.</Text>
-        </View>
-        <View style={detail.statCircle}>👤</View>
-        <View style={detail.statCircle}>🪪</View>
-        <View style={detail.statCircle}>
-          <Text style={detail.rating}>⭐ 4.8</Text>
-        </View>
-      </View>
+   <View style={detail.statsRow}>
+  <View style={detail.statCircle}>
+    <Text style={detail.statText}>7+</Text>
+    <Text style={detail.statSub}>EXP.</Text>
+  </View>
+
+  <View style={detail.statCircle}>
+    <Text style={detail.statText}>👤</Text>
+  </View>
+
+  <View style={detail.statCircle}>
+    <Text style={detail.statText}>🪪</Text>
+  </View>
+
+  <View style={detail.statCircle}>
+    <Text style={detail.rating}>⭐ 4.8</Text>
+  </View>
+</View>
+
 
       {/* Info */}
       <View style={detail.infoCard}>

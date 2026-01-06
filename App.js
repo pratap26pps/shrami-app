@@ -41,19 +41,19 @@ function DeepLinkHandler() {
 
 const linking = {
   prefixes: ["shrami://"],
-  config: {
-    screens: {
-      Tabs: {
-        screens: {
-          Home: "home",
-          Search: "search",
-          Cart: "cart",
-          Setting: "setting",
-        },
-      },
-      AuthSuccess: "auth-success",
-    },
-  },
+  // config: {
+  //   screens: {
+  //     Tabs: {
+  //       screens: {
+  //         Home: "home",
+  //         Search: "search",
+  //         Cart: "cart",
+  //         Setting: "setting",
+  //       },
+  //     },
+  //     AuthSuccess: "auth-success",
+  //   },
+  // },
 };
 
 export default function App() {
