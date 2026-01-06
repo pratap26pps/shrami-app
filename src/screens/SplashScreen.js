@@ -1,11 +1,11 @@
 import React, { useEffect } from "react";
-import { View, Image, StyleSheet } from "react-native";
+import { View, Image, StyleSheet,Text } from "react-native";
 
 export default function SplashScreen({ navigation }) {
   useEffect(() => {
     setTimeout(() => {
       navigation.replace("Welcome");
-    }, 2000);
+    },2000);
   }, []);
 
   return (
@@ -14,7 +14,7 @@ export default function SplashScreen({ navigation }) {
         source={require("../assets/logo.png")}
         style={styles.logo}
         resizeMode="contain"
-      />
+      /> 
     </View>
   );
 }
