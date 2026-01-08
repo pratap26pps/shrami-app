@@ -1,4 +1,4 @@
-import React from "react";
+import { useState}  from "react";
 import {
   View,
   Text,
@@ -7,8 +7,28 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { Ionicons, Feather } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
+import RazorpayPayment from "../../components/RazorpayPayment";
 
 export default function CheckoutScreen() {
+  const navigation = useNavigation();
+  const [showPay, setShowPay] = useState(false);
+
+    // 👇 add dummy values here
+  const amount = 300;
+
+  const orderData = {
+    orderId: "TEMP1234567",
+    id: "TEMP1234567",
+  };
+
+  const user = {
+    id: "USER001",
+    name: "Guest User",
+    email: "guest@example.com",
+    mobile: "9999999999",
+  };
+  
   return (
     <View style={styles.container}>
       {/* Header */}
@@ -76,13 +96,31 @@ export default function CheckoutScreen() {
               <Text style={styles.totalLabel}>Total</Text>
             </View>
 
-            <TouchableOpacity style={styles.placeOrder}>
+            <TouchableOpacity
+              style={styles.placeOrder}
+              onPress={() => setShowPay(true)}
+            >
               <Text style={styles.placeOrderText}>Place Order →</Text>
             </TouchableOpacity>
           </View>
         </View>
       </ScrollView>
- 
+
+      <RazorpayPayment
+        visible={showPay}
+        amount={amount || 4}
+        orderData={orderData}
+        customerInfo={user}
+        onSuccess={(data) => {
+          console.log("paid", data);
+          setShowPay(false);
+        }}
+        onFailure={(err) => {
+          console.log("err", err);
+          setShowPay(false);
+        }}
+        onClose={() => setShowPay(false)}
+      />
     </View>
   );
 }

@@ -1,23 +1,61 @@
- 
+ import { useEffect, useState } from "react";
+import axios from "axios";
 import {
   View,
   Text,
   StyleSheet,
   ScrollView,
+  Image,
   TouchableOpacity,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
  
  export function PaymentHistory() {
+
+    const [orders, setOrders] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    getOrders();
+  }, []);
+
+  const getOrders = async () => {
+    try {
+      const res = await axios.get("https://shrami-backend.onrender.com/api/worker/getorders");  
+      console.log("orders:", res.data);
+ 
+        setOrders(res.data.orders);
+  
+    } catch (err) {
+      console.log("Failed:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+    console.log("orders:", orders);
+
   return (
     <View style={styles.container}>
       {/* Header */}
-      <View style={styles.header}>
-        <Text style={styles.logo}>SHRAM!</Text>
-        <Ionicons name="person-circle" size={42} color="#E53935" />
-      </View>
-
+           <View style={styles.header}>
+                   <Image
+                    source={require("../../assets/redlogo.png")}
+                    resizeMode="contain"
+                    style={styles.logo}
+                  />
+        <TouchableOpacity
+         style={styles.profileIcon}
+         onPress={() => navigation.navigate("Profile")}
+       >
+         <Image
+           source={require("../../assets/images/profile.png")}
+           resizeMode="contain"
+           style={styles.profileImage}
+         />
+       </TouchableOpacity>
+           </View>
       {/* Search */}
       <View style={styles.searchRow}>
         <View style={styles.searchBar} />
@@ -28,21 +66,29 @@ import { Ionicons } from "@expo/vector-icons";
 
       <Text style={styles.pageTitle}>Payment History</Text>
 
-      <ScrollView showsVerticalScrollIndicator={false}>
-        {[1, 2, 3, 4, 5].map((_, i) => (
-          <View key={i} style={styles.paymentCard}>
-            <View>
-              <Text style={styles.paidTo}>Paid To</Text>
-              <Text style={styles.name}>Name</Text>
-              <Text style={styles.date}>21/12/2025</Text>
+     {loading ? (
+        <Text>Loading...</Text>
+      ) : orders.length === 0 ? (
+        <Text>No Order Found</Text>
+      ) : (
+        <ScrollView showsVerticalScrollIndicator={false}>
+          {orders.map((order) => (
+            <View key={order._id} style={styles.paymentCard}>
+              <View>
+                <Text style={styles.paidTo}>Paid To</Text>
+                <Text style={styles.name}>{order.customerName || "Unknown"}</Text>
+                <Text style={styles.date}>
+                  {new Date(order.createdAt).toLocaleDateString()}
+                </Text>
+              </View>
+
+              <Text style={styles.amount}>₹{order.amount}</Text>
             </View>
+          ))}
+        </ScrollView>
+      )}
 
-            <Text style={styles.amount}>2000</Text>
-          </View>
-        ))}
-      </ScrollView>
-
-      {/* <BottomNav /> */}
+ 
     </View>
   );
 }

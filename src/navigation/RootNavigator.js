@@ -12,6 +12,8 @@ import CheckoutScreen from "../screens/contractorAction/cart";
 import { PaymentHistory } from "../screens/contractorAction/paymenthistory";
 import PickUpScreen from "../screens/Rickshaw.js/PickUpScreen";
 import LabourJob from "../components/LabourJob";
+import RazorpayPayment from "../components/RazorpayPayment";
+
 const Stack = createNativeStackNavigator();
 
 export default function RootNavigator() {
@@ -31,6 +33,7 @@ export default function RootNavigator() {
         <Stack.Screen name="PickUpScreen" component={PickUpScreen} />
         <Stack.Screen name="WorkerScreen" component={WorkerScreen} />
         <Stack.Screen name="LabourJob" component={LabourJob} />
+        <Stack.Screen name="RazorpayPayment" component={RazorpayPayment} />
         </>
    
       ) : (
