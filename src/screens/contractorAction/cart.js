@@ -1,4 +1,4 @@
-import React from "react";
+import { useState}  from "react";
 import {
   View,
   Text,
@@ -7,8 +7,23 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { Ionicons, Feather } from "@expo/vector-icons";
-
+import { useNavigation } from "@react-navigation/native";
+import RazorpayPayment from "../../components/RazorpayPayment";
+import { useContext } from "react";
+import { HireContext } from "../../context/HireContext";
 export default function CheckoutScreen() {
+  const navigation = useNavigation();
+  const [showPay, setShowPay] = useState(false);
+  const { hiredWorkers } = useContext(HireContext);
+    // 👇 add dummy values here
+ 
+ console.log("hiredWorkers",hiredWorkers)
+  const orderData = {
+    orderId: "TEMP1234567",
+    id: "TEMP1234567",
+  };
+ 
+  
   return (
     <View style={styles.container}>
       {/* Header */}
@@ -30,13 +45,13 @@ export default function CheckoutScreen() {
             <Feather name="shopping-cart" size={16} color="#E53935" />
             <Text style={styles.cartText}>Items In Cart</Text>
           </View>
-
-          {[1, 2].map((_, i) => (
+            {hiredWorkers.map((w, i) => (
+    
             <View key={i} style={styles.cartItem}>
               <View style={styles.avatar} />
 
               <View style={{ flex: 1 }}>
-                <Text style={styles.category}>Category Name</Text>
+                <Text style={styles.category}>{w.name}</Text>
                 <Text style={styles.details}>see details...</Text>
               </View>
 
@@ -72,17 +87,35 @@ export default function CheckoutScreen() {
 
           <View style={styles.totalBar}>
             <View>
-              <Text style={styles.totalAmount}>₹300</Text>
+              <Text style={styles.totalAmount}>₹ {hiredWorkers.price|| 300}</Text>
               <Text style={styles.totalLabel}>Total</Text>
             </View>
 
-            <TouchableOpacity style={styles.placeOrder}>
+            <TouchableOpacity
+              style={styles.placeOrder}
+              onPress={() => setShowPay(true)}
+            >
               <Text style={styles.placeOrderText}>Place Order →</Text>
             </TouchableOpacity>
           </View>
         </View>
       </ScrollView>
- 
+
+      <RazorpayPayment
+        visible={showPay}
+        amount={hiredWorkers.price || 4}
+        orderData={orderData}
+        customerInfo={hiredWorkers}
+        onSuccess={(data) => {
+          console.log("paid", data);
+          setShowPay(false);
+        }}
+        onFailure={(err) => {
+          console.log("err", err);
+          setShowPay(false);
+        }}
+        onClose={() => setShowPay(false)}
+      />
     </View>
   );
 }

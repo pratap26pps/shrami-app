@@ -1,3 +1,5 @@
+//new code
+
 import {
   View,
   Text,
@@ -5,74 +7,89 @@ import {
   Image,
   TouchableOpacity,
   StyleSheet,
+  TextInput,
+  Dimensions,
 } from "react-native";
 import { useRoute, useNavigation } from "@react-navigation/native";
 import { Feather } from "@expo/vector-icons";
 
+const { width, height } = Dimensions.get("window");
+
 const JOBS = {
   construction: [
     {
-       id: "construction-1",
+      id: "construction-1",
       name: "Electrician",
       image: require("../assets/images/electrictian.png"),
     },
     {
-       id: "construction-2",
+      id: "construction-2",
       name: "Plumber",
       image: require("../assets/images/Plumbering.png"),
     },
     {
-       id: "construction-3",
+      id: "construction-3",
       name: "PVC Fitter",
       image: require("../assets/images/pvc.png"),
     },
     {
-       id: "construction-5",
+      id: "construction-4",
       name: "Carpenter",
       image: require("../assets/images/construction.png"),
     },
   ],
+};
 
-  rickshaw: [
+const SUBJOBS = {
+  Construction: [
     {
-      id: "6",
-      name: "Short Route",
-      image: require("../assets/images/shortRoute.png"),
+      id: "labour-1",
+      title: "Labour",
+      subtitle: "(मज़दूर)",
+      image: require("../assets/images/electrictian.png"),
     },
     {
-      id: "7",
-      name: "Long Route",
-      image: require("../assets/images/taxi.png"),
-    },
-    // {
-    //   id: "8",
-    //   name: "Taxi",
-    //   image: require("../assets/images/househelp.png"),
-    // },
-    {
-      id: "9",
-      name: "Tempo",
-      image: require("../assets/images/tempo.png"),
+      id: "helper-1",
+      title: "Construction Helper",
+      subtitle: "(सहायक)",
+      image: require("../assets/images/electrictian.png"),
     },
   ],
-
-  househelp: [
+  Electrical: [
     {
-      id: "10",
-      name: "Cook",
-      image: require("../assets/images/building.png"),
+      id: "elec-1",
+      title: "Electrician",
+      subtitle: "(बिजली मिस्त्री)",
+      image: require("../assets/images/electrictian.png"),
     },
     {
-      id: "11",
-      name: "Maid",
-      image: require("../assets/images/rickshaw.png"),
-    },
-    {
-      id: "12",
-      name: "Babysitter",
-      image: require("../assets/images/househelp.png"),
+      id: "wireman-1",
+      title: "Wireman",
+      subtitle: "(तार जोड़ने वाला)",
+      image: require("../assets/images/electrictian.png"),
     },
   ],
+  Plumbing: [
+    {
+      id: "plumb-1",
+      title: "Plumber",
+      subtitle: "(प्लंबर)",
+      image: require("../assets/images/electrictian.png"),
+    },
+    {
+      id: "pvcfit",
+      title: "PVC Pipe Fitter",
+      subtitle: "(पाइप फिटिंग)",
+      image: require("../assets/images/electrictian.png"),
+    },
+  ],
+};
+
+const MAP = {
+  Electrician: "Electrical",
+  Plumber: "Plumbing",
+  "PVC Fitter": "Plumbing",
+  Carpenter: "Construction",
 };
 
 export default function LabourJob() {
@@ -80,18 +97,18 @@ export default function LabourJob() {
   const navigation = useNavigation();
   const { type } = route.params;
 
- const jobs = JOBS[type?.toLowerCase()] || [];
-
+  const jobs = JOBS[type?.toLowerCase()] || [];
 
   return (
-    <View style={{ flex: 1, padding: 20 }}>
+    <View style={styles.container}>
       <FlatList
         data={jobs}
-       keyExtractor={(item) => item.id}
-
+        keyExtractor={(item) => item.id}
+        contentContainerStyle={styles.listContainer}
+        showsVerticalScrollIndicator={false}
         ListHeaderComponent={
           <>
-            {/* Header */}
+            {/* HEADER */}
             <View style={styles.header}>
               <Image
                 source={require("../assets/redlogo.png")}
@@ -108,19 +125,23 @@ export default function LabourJob() {
               </TouchableOpacity>
             </View>
 
-            {/* Search */}
+            {/* SEARCH */}
             <View style={styles.searchRow}>
               <View style={styles.searchBox}>
-                <Text style={styles.searchText}>Search labour...</Text>
+                <TextInput
+                  placeholder="Search labour..."
+                  placeholderTextColor="#888"
+                  style={styles.searchText}
+                />
               </View>
-              <View style={styles.filterBtn}>
+              <TouchableOpacity style={styles.filterBtn}>
                 <Feather
                   name="sliders"
                   size={20}
-                  color="white"
+                  color="#fff"
                   style={{ transform: [{ rotate: "90deg" }] }}
                 />
-              </View>
+              </TouchableOpacity>
             </View>
 
             <Text style={styles.title}>
@@ -128,12 +149,39 @@ export default function LabourJob() {
             </Text>
           </>
         }
-       renderItem={({ item }) => (
-  <TouchableOpacity style={styles.card}>
-    <Image source={item.image} style={styles.cardImage} />
-    <Text style={styles.cardText}>{item.name}</Text>
-  </TouchableOpacity>
+renderItem={({ item }) => (
+  <View style={styles.categorySection}>
+    <Text style={styles.sectionTitle}>{item.name}</Text>
+
+    <FlatList
+      data={SUBJOBS[MAP[item.name]] || []}
+      keyExtractor={(s) => s.id}
+      horizontal
+      showsHorizontalScrollIndicator={false}
+      snapToAlignment="start"
+      decelerationRate="fast"
+      renderItem={({ item: sub }) => (
+        <TouchableOpacity style={styles.subCard}  onPress={() =>
+    navigation.navigate("WorkerListScreen", { job: sub.title })
+  }>
+          <Image source={sub.image} style={styles.subImage} />
+          
+          <View style={styles.subBottom}>
+            <Text style={styles.subText}>
+              {sub.title} {sub.subtitle}
+            </Text>
+            <Image
+              source={require("../assets/images/arrow.png")}
+              style={styles.subArrow}
+            />
+          </View>
+        </TouchableOpacity>
+      )}
+    />
+  </View>
 )}
+
+
 
       />
     </View>
@@ -141,259 +189,165 @@ export default function LabourJob() {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#f5f5f5",
+  },
+
+  listContainer: {
+    padding: width * 0.05,
+  },
+
+ 
   header: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginBottom: 16,
-  },
+  flexDirection: "row",
+  justifyContent: "space-between",
+  alignItems: "center",
+
+  marginTop: height * 0.03,     // 👈 upar se niche
+  marginBottom: height * 0.015,
+},
+
+
   logo: {
-    width: 120,
-    height: 40,
+    width: width * 0.35,
+    height: height * 0.06,
+    resizeMode: "contain",
   },
+
   profileIcon: {
-    width: 40,
-    height: 40,
+    width: width * 0.12,
+    height: width * 0.12,
+    borderRadius: width * 0.06,
   },
+
   profileImage: {
     width: "100%",
     height: "100%",
+    resizeMode: "contain",
   },
+
   searchRow: {
-    flexDirection: "row",
-    marginBottom: 16,
-  },
+  flexDirection: "row",
+  alignItems: "center",
+  marginTop: height * 0.015,   
+  marginBottom: height * 0.02,
+},
+
+
   searchBox: {
     flex: 1,
     backgroundColor: "#eee",
-    padding: 12,
-    borderRadius: 10,
+    paddingVertical: height * 0.001,
+    paddingHorizontal: width * 0.04,
+    borderRadius: width * 0.04,
   },
+
   searchText: {
-    color: "#888",
+    fontSize: width * 0.04,
+    color: "#333",
   },
+
   filterBtn: {
-    marginLeft: 10,
+    marginLeft: width * 0.03,
     backgroundColor: "#E53935",
-    padding: 12,
-    borderRadius: 10,
+    padding: width * 0.035,
+    borderRadius: width * 0.04,
   },
+
   title: {
-    fontSize: 22,
+    fontSize: width * 0.055,
     fontWeight: "bold",
-    marginBottom: 10,
+    marginBottom: height * 0.02,
   },
+
   card: {
-    padding: 16,
+    width: "100%",
     backgroundColor: "#fff",
-    marginTop: 12,
-    borderRadius: 10,
+    borderRadius: width * 0.04,
+    marginBottom: height * 0.025,
+    elevation: 4,
+    overflow: "hidden",
   },
-  cardText: {
-    fontSize: 16,
+
+  cardImage: {
+    width: "100%",
+    height: height * 0.22,
+    resizeMode: "cover",
   },
+cardAlign: {
+  flexDirection: "row",  
+  justifyContent: "space-between" ,
+},
+
+cardText: {
+  fontSize: width * 0.045,
+  fontWeight: "600",
+  marginTop:10,
+  padding:8,
+  color: "#333",
+},
+ 
+  nameRow: {
+  flexDirection: "row",
+  justifyContent: "space-between",
+  alignItems: "center",
+  marginTop: 6,
+},
+
+arrowIcon: {
+  width: 48,
+  height: 48,
+  resizeMode: "contain",
+},
+
+categorySection: {
+  marginBottom: 20,
+},
+
+sectionTitle: {
+  fontSize: 22,
+  fontWeight: "bold",
+  marginVertical: 10,
+  color: "#000",
+},
+
+subCard: {
+  width: width * 0.8,
+  backgroundColor: "#fff",
+  borderRadius: 18,
+  borderWidth: 2,
+  borderColor: "#E53935",
+  marginRight: 12,
+  overflow: "hidden",
+  elevation: 4,
+},
+
+subImage: {
+  width: "100%",
+  height: height * 0.18,
+  resizeMode: "cover",
+},
+
+subBottom: {
+  flexDirection: "row",
+  alignItems: "center",
+  justifyContent: "space-between",
+  paddingHorizontal: 12,
+  paddingVertical: 8,
+},
+
+subText: {
+  fontSize: 16,
+  fontWeight: "bold",
+  color: "#E53935",
+},
+
+subArrow: {
+  width: 30,
+  height: 30,
+  resizeMode: "contain",
+},
+
+
 });
-
-
-
-
-
-
-
-
-
-
-
-// import {
-//   View,
-//   Text,
-//   FlatList,
-//   Image,
-//   TouchableOpacity,
-//   StyleSheet,
-// } from "react-native";
-// import { useRoute, useNavigation } from "@react-navigation/native";
-// import { Feather } from "@expo/vector-icons";
-
-// const JOBS = {
-//   construction: [
-//     {
-//        id: "construction-1",
-//       name: "Electrician",
-//       image: require("../assets/images/electrictian.png"),
-//     },
-//     {
-//        id: "construction-2",
-//       name: "Plumber",
-//       image: require("../assets/images/Plumbering.png"),
-//     },
-//     {
-//        id: "construction-3",
-//       name: "PVC Fitter",
-//       image: require("../assets/images/pvc.png"),
-//     },
-//     {
-//        id: "construction-5",
-//       name: "Carpenter",
-//       image: require("../assets/images/construction.png"),
-//     },
-//   ],
-
-//   rickshaw: [
-//     {
-//       id: "6",
-//       name: "Short Route",
-//       image: require("../assets/images/shortRoute.png"),
-//     },
-//     {
-//       id: "7",
-//       name: "Long Route",
-//       image: require("../assets/images/taxi.png"),
-//     },
-//     // {
-//     //   id: "8",
-//     //   name: "Taxi",
-//     //   image: require("../assets/images/househelp.png"),
-//     // },
-//     {
-//       id: "9",
-//       name: "Tempo",
-//       image: require("../assets/images/tempo.png"),
-//     },
-//   ],
-
-//   househelp: [
-//     {
-//       id: "10",
-//       name: "Cook",
-//       image: require("../assets/images/building.png"),
-//     },
-//     {
-//       id: "11",
-//       name: "Maid",
-//       image: require("../assets/images/rickshaw.png"),
-//     },
-//     {
-//       id: "12",
-//       name: "Babysitter",
-//       image: require("../assets/images/househelp.png"),
-//     },
-//   ],
-// };
-
-// export default function LabourJob() {
-//   const route = useRoute();
-//   const navigation = useNavigation();
-//   const { type } = route.params;
-
-//  const jobs = JOBS[type?.toLowerCase()] || [];
-
-
-//   return (
-//     <View style={{ flex: 1, padding: 20 }}>
-//       <FlatList
-//         data={jobs}
-//        keyExtractor={(item) => item.id}
-
-//         ListHeaderComponent={
-//           <>
-//             {/* Header */}
-//             <View style={styles.header}>
-//               <Image
-//                 source={require("../assets/redlogo.png")}
-//                 style={styles.logo}
-//               />
-//               <TouchableOpacity
-//                 style={styles.profileIcon}
-//                 onPress={() => navigation.navigate("Profile")}
-//               >
-//                 <Image
-//                   source={require("../assets/images/profile.png")}
-//                   style={styles.profileImage}
-//                 />
-//               </TouchableOpacity>
-//             </View>
-
-//             {/* Search */}
-//             <View style={styles.searchRow}>
-//               <View style={styles.searchBox}>
-//                 <Text style={styles.searchText}>Search labour...</Text>
-//               </View>
-//               <View style={styles.filterBtn}>
-//                 <Feather
-//                   name="sliders"
-//                   size={20}
-//                   color="white"
-//                   style={{ transform: [{ rotate: "90deg" }] }}
-//                 />
-//               </View>
-//             </View>
-
-//             <Text style={styles.title}>
-//               {type.toUpperCase()} JOBS
-//             </Text>
-//           </>
-//         }
-//        renderItem={({ item }) => (
-//   <TouchableOpacity style={styles.card}>
-//     <Image source={item.image} style={styles.cardImage} />
-//     <Text style={styles.cardText}>{item.name}</Text>
-//   </TouchableOpacity>
-// )}
-
-//       />
-//     </View>
-//   );
-// }
-
-// const styles = StyleSheet.create({
-//   header: {
-//     flexDirection: "row",
-//     justifyContent: "space-between",
-//     marginBottom: 16,
-//   },
-//   logo: {
-//     width: 120,
-//     height: 40,
-//   },
-//   profileIcon: {
-//     width: 40,
-//     height: 40,
-//   },
-//   profileImage: {
-//     width: "100%",
-//     height: "100%",
-//   },
-//   searchRow: {
-//     flexDirection: "row",
-//     marginBottom: 16,
-//   },
-//   searchBox: {
-//     flex: 1,
-//     backgroundColor: "#eee",
-//     padding: 12,
-//     borderRadius: 10,
-//   },
-//   searchText: {
-//     color: "#888",
-//   },
-//   filterBtn: {
-//     marginLeft: 10,
-//     backgroundColor: "#E53935",
-//     padding: 12,
-//     borderRadius: 10,
-//   },
-//   title: {
-//     fontSize: 22,
-//     fontWeight: "bold",
-//     marginBottom: 10,
-//   },
-//   card: {
-//     padding: 16,
-//     backgroundColor: "#fff",
-//     marginTop: 12,
-//     borderRadius: 10,
-//   },
-//   cardText: {
-//     fontSize: 16,
-//   },
-// });
