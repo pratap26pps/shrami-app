@@ -1,5 +1,5 @@
 PODS:
-  - EXConstants (18.0.12):
+  - EXConstants (14.0.2):
     - ExpoModulesCore
   - EXFirebaseCore (6.0.0):
     - ExpoModulesCore
@@ -2133,7 +2133,7 @@ PODS:
   - Yoga (0.0.0)
 
 DEPENDENCIES:
-  - EXConstants (from `../node_modules/expo/node_modules/expo-constants/ios`)
+  - EXConstants (from `../node_modules/expo-constants/ios`)
   - EXFirebaseCore (from `../node_modules/expo-firebase-core/ios`)
   - Expo (from `../node_modules/expo`)
   - ExpoAsset (from `../node_modules/expo/node_modules/expo-asset/ios`)
@@ -2239,7 +2239,7 @@ SPEC REPOS:
 
 EXTERNAL SOURCES:
   EXConstants:
-    :path: "../node_modules/expo/node_modules/expo-constants/ios"
+    :path: "../node_modules/expo-constants/ios"
   EXFirebaseCore:
     :path: "../node_modules/expo-firebase-core/ios"
   Expo:
@@ -2413,7 +2413,7 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
-  EXConstants: 805f35b1b295c542ca6acce836f21a1f9ee104d5
+  EXConstants: 25bb3ab88d4a5455acaad2f4f28175d1d61c58a1
   EXFirebaseCore: 9317761d8089bad0e2e39e6ba1ae24217cc8ff02
   Expo: 60c21ba34593688a2a6e8445c1f8b44abb0e3fae
   ExpoAsset: f867e55ceb428aab99e1e8c082b5aee7c159ea18

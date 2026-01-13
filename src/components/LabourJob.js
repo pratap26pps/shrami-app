@@ -38,6 +38,7 @@ const JOBS = {
       image: require("../assets/images/construction.png"),
     },
   ],
+  
 };
 
 const SUBJOBS = {
@@ -96,7 +97,7 @@ export default function LabourJob() {
   const route = useRoute();
   const navigation = useNavigation();
   const { type } = route.params;
-
+   
   const jobs = JOBS[type?.toLowerCase()] || [];
 
   return (
