@@ -83,8 +83,8 @@ const categoryType = [
         <View style={styles.popularRow}>
           {categoryType.map((item) => (
             <TouchableOpacity key={item?.id} style={styles.popularItem}  onPress={() =>
-    navigation.navigate("LabourJob", { type: item?.name })
-  }>
+           navigation.navigate("LabourJob", { type: item?.name })
+          }>
              <Image
                source={item.image}
                resizeMode="contain"
