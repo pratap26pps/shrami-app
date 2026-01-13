@@ -33,6 +33,7 @@
     "react-native-webview": "13.15.0"
   },
   "devDependencies": {
+    "@types/react": "~19.1.10",
     "@types/react-native-razorpay": "^2.2.6",
     "autoprefixer": "^10.4.14",
     "postcss": "^8.4.24",
