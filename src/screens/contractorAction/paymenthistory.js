@@ -9,10 +9,12 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
+ 
 
  
  export function PaymentHistory() {
-
+  const navigation = useNavigation();
     const [orders, setOrders] = useState([]);
     const [loading, setLoading] = useState(true);
 
@@ -47,7 +49,7 @@ import { Ionicons } from "@expo/vector-icons";
                   />
         <TouchableOpacity
          style={styles.profileIcon}
-         onPress={() => navigation.navigate("Profile")}
+            onPress={() => navigation.navigate("Profile")}
        >
          <Image
            source={require("../../assets/images/profile.png")}

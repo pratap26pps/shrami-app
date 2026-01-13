@@ -3,6 +3,7 @@ import { useEffect, useContext } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import RootNavigator from "./src/navigation/RootNavigator";
 import { AuthProvider, AuthContext } from "./src/context/AuthContext";
+import { HireProvider } from "./src/context/HireContext";
 
 function DeepLinkHandler() {
   const { loginWithToken, setGoogleProfile } = useContext(AuthContext);
@@ -59,10 +60,13 @@ const linking = {
 export default function App() {
   return (
     <AuthProvider>
+      <HireProvider>
       <NavigationContainer linking={linking}>
         <DeepLinkHandler />
         <RootNavigator />
       </NavigationContainer>
+      </HireProvider>
+     
     </AuthProvider>
   );
 }

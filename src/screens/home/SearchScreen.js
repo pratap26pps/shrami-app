@@ -6,13 +6,21 @@ import {
   ScrollView,
   StyleSheet,
 } from "react-native";
+import { useRoute } from "@react-navigation/native";
 
 export default function WorkerListScreen({ navigation }) {
+   const route = useRoute();
+  const { job } = route.params || {};
+
   const workers = Array(5).fill({
-    name: "Name",
-    quality: "Qualities",
+     id: "USER001",
+    quality: job + " work specialist",
     rating: 4.8,
-    image: require("../../assets/redlogo.png"), 
+    image: require("../../assets/redlogo.png"),
+    name: "Guest User",
+    email: "guest@example.com",
+    mobile: "9999999999",
+    price: 500,
   });
 
   return (
@@ -25,7 +33,8 @@ export default function WorkerListScreen({ navigation }) {
         </TouchableOpacity>
       </View>
 
-      <Text style={styles.heading}>Cleaning</Text>
+      <Text style={styles.heading}>{job}</Text>
+
 
       {workers.map((item, index) => (
         <View key={index} style={styles.card} >

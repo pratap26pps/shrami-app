@@ -40,6 +40,58 @@ const JOBS = {
   ],
 };
 
+const SUBJOBS = {
+  Construction: [
+    {
+      id: "labour-1",
+      title: "Labour",
+      subtitle: "(मज़दूर)",
+      image: require("../assets/images/electrictian.png"),
+    },
+    {
+      id: "helper-1",
+      title: "Construction Helper",
+      subtitle: "(सहायक)",
+      image: require("../assets/images/electrictian.png"),
+    },
+  ],
+  Electrical: [
+    {
+      id: "elec-1",
+      title: "Electrician",
+      subtitle: "(बिजली मिस्त्री)",
+      image: require("../assets/images/electrictian.png"),
+    },
+    {
+      id: "wireman-1",
+      title: "Wireman",
+      subtitle: "(तार जोड़ने वाला)",
+      image: require("../assets/images/electrictian.png"),
+    },
+  ],
+  Plumbing: [
+    {
+      id: "plumb-1",
+      title: "Plumber",
+      subtitle: "(प्लंबर)",
+      image: require("../assets/images/electrictian.png"),
+    },
+    {
+      id: "pvcfit",
+      title: "PVC Pipe Fitter",
+      subtitle: "(पाइप फिटिंग)",
+      image: require("../assets/images/electrictian.png"),
+    },
+  ],
+};
+
+const MAP = {
+  Electrician: "Electrical",
+  Plumber: "Plumbing",
+  "PVC Fitter": "Plumbing",
+  Carpenter: "Construction",
+};
+
 export default function LabourJob() {
   const route = useRoute();
   const navigation = useNavigation();
@@ -97,20 +149,40 @@ export default function LabourJob() {
             </Text>
           </>
         }
-        renderItem={({ item }) => (
-          <TouchableOpacity style={styles.card}>
-            <Image source={item.image} style={styles.cardImage} />
-           <View style={styles.cardAlign}>
-  <Text style={styles.cardText}>{item.name}</Text>
+renderItem={({ item }) => (
+  <View style={styles.categorySection}>
+    <Text style={styles.sectionTitle}>{item.name}</Text>
 
-  <Image
-    source={require("../assets/images/arrow.png")}
-    style={styles.arrowIcon}
-  />
-</View>
+    <FlatList
+      data={SUBJOBS[MAP[item.name]] || []}
+      keyExtractor={(s) => s.id}
+      horizontal
+      showsHorizontalScrollIndicator={false}
+      snapToAlignment="start"
+      decelerationRate="fast"
+      renderItem={({ item: sub }) => (
+        <TouchableOpacity style={styles.subCard}  onPress={() =>
+    navigation.navigate("WorkerListScreen", { job: sub.title })
+  }>
+          <Image source={sub.image} style={styles.subImage} />
+          
+          <View style={styles.subBottom}>
+            <Text style={styles.subText}>
+              {sub.title} {sub.subtitle}
+            </Text>
+            <Image
+              source={require("../assets/images/arrow.png")}
+              style={styles.subArrow}
+            />
+          </View>
+        </TouchableOpacity>
+      )}
+    />
+  </View>
+)}
 
-          </TouchableOpacity>
-        )}
+
+
       />
     </View>
   );
@@ -228,5 +300,54 @@ arrowIcon: {
   height: 48,
   resizeMode: "contain",
 },
+
+categorySection: {
+  marginBottom: 20,
+},
+
+sectionTitle: {
+  fontSize: 22,
+  fontWeight: "bold",
+  marginVertical: 10,
+  color: "#000",
+},
+
+subCard: {
+  width: width * 0.8,
+  backgroundColor: "#fff",
+  borderRadius: 18,
+  borderWidth: 2,
+  borderColor: "#E53935",
+  marginRight: 12,
+  overflow: "hidden",
+  elevation: 4,
+},
+
+subImage: {
+  width: "100%",
+  height: height * 0.18,
+  resizeMode: "cover",
+},
+
+subBottom: {
+  flexDirection: "row",
+  alignItems: "center",
+  justifyContent: "space-between",
+  paddingHorizontal: 12,
+  paddingVertical: 8,
+},
+
+subText: {
+  fontSize: 16,
+  fontWeight: "bold",
+  color: "#E53935",
+},
+
+subArrow: {
+  width: 30,
+  height: 30,
+  resizeMode: "contain",
+},
+
 
 });

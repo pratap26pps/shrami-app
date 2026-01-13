@@ -6,8 +6,27 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from "react-native";
+import { useContext, useState } from "react";
+import { HireContext } from "../../context/HireContext";
 
-export default function WorkerScreen() {
+export default function WorkerScreen({ route }) {
+
+  const { hireWorker } = useContext(HireContext);
+  // Ideally pass selected worker from previous screen
+  const worker = {
+    name: "Name",
+    quality: "Qualities",
+    rating: 4.8,
+  };
+
+  const [isHired, setIsHired] = useState(false);
+
+  const handleHire = () => {
+    hireWorker(worker);
+    setIsHired(true);
+  };
+
+
   return (
     <ScrollView style={detail.container}>
       <View style={detail.profileCard}>
@@ -19,8 +38,17 @@ export default function WorkerScreen() {
         <Text style={detail.name}>Name</Text>
         <Text style={detail.sub}>Qualities</Text>
 
-        <TouchableOpacity style={detail.hireBtn}>
-          <Text style={detail.hireText}>HIRE</Text>
+        <TouchableOpacity
+          style={[
+            detail.hireBtn,
+            { backgroundColor: isHired ? "#4CAF50" : "#E53935" },
+          ]}
+          disabled={isHired}
+          onPress={handleHire}
+        >
+          <Text style={detail.hireText}>
+            {isHired ? "HIRED" : "HIRE"}
+          </Text>
         </TouchableOpacity>
       </View>
 
