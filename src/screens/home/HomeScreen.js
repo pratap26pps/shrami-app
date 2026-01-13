@@ -1,6 +1,7 @@
 import { View, Text, Image, TouchableOpacity, ScrollView, StyleSheet } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
+import { TextInput } from "react-native";
 export default function HomeScreen() {
   const navigation = useNavigation();
 const categoryType = [
@@ -45,7 +46,7 @@ const categoryType = [
   </TouchableOpacity>
       </View>
 
-      {/* Search */}
+      {/* Search
       <View style={styles.searchRow}>
         <View style={styles.searchBox}>
           <Text style={styles.searchText}>Search labour...</Text>
@@ -53,7 +54,27 @@ const categoryType = [
         <View style={styles.filterBtn}>
           <Feather name="sliders" size={20} color="white"   style={{ transform: [{ rotate: "90deg" }] }}/>
         </View>
-      </View>
+      </View> */}
+
+      {/* Search */}
+<View style={styles.searchRow}>
+  <View style={styles.searchBox}>
+    <TextInput
+      placeholder="Search labour..."
+      placeholderTextColor="#999"
+      style={styles.searchInput}
+    />
+  </View>
+
+  <View style={styles.filterBtn}>
+    <Feather
+      name="sliders"
+      size={20}
+      color="white"
+      style={{ transform: [{ rotate: "90deg" }] }}
+    />
+  </View>
+</View>
 
       {/* Popular */}
       <View style={styles.card}>
