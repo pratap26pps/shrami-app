@@ -1,4 +1,4 @@
-import { View, Text, Image, TouchableOpacity, ScrollView, StyleSheet, TextInput } from "react-native";
+import { View, Text, Image, TouchableOpacity, ScrollView, StyleSheet, } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { TextInput } from "react-native";

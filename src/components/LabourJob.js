@@ -38,6 +38,42 @@ const JOBS = {
       image: require("../assets/images/construction.png"),
     },
   ],
+
+  rickshaw: [
+    {
+      id: "rickshaw-1",
+      name: "Rickshaw",
+      image: require("../assets/images/rickshaw.png"),
+    },
+    {
+      id: "rickshaw-2",
+      name: "Taxi",
+      image: require("../assets/images/taxi.png"),
+    },
+    {
+      id: "rickshaw-3",
+      name: "Tempo",
+      image: require("../assets/images/tempo.png"),
+    },
+  ],
+
+  househelp: [
+    {
+      id: "clean-1",
+      name: "Cleaning",
+      image: require("../assets/images/rickshaw.png"),
+    },
+    {
+      id: "food-1",
+      name: "Food",
+      image: require("../assets/images/taxi.png"),
+    },
+    {
+      id: "both-1",
+      name: "Both",
+      image: require("../assets/images/tempo.png"),
+    },
+  ],
   
 };
 
@@ -84,6 +120,97 @@ const SUBJOBS = {
       image: require("../assets/images/electrictian.png"),
     },
   ],
+
+ Rickshaw: [
+    {
+      id: "rick-1",
+      title: "Rickshaw Driver",
+      subtitle: "(रिक्शा चालक)",
+      image: require("../assets/images/shortRoute.png"),
+    },
+    {
+      id: "rick-2",
+      title: "Passenger Ride",
+      subtitle: "(यात्री सेवा)",
+      image: require("../assets/images/shortRoute.png"),
+    },
+  ],
+
+  Taxi: [
+    {
+      id: "taxi-1",
+      title: "Taxi Driver",
+      subtitle: "(टैक्सी चालक)",
+      image: require("../assets/images/taxi.png"),
+    },
+    {
+      id: "taxi-2",
+      title: "Outstation Ride",
+      subtitle: "(आउटस्टेशन सेवा)",
+      image: require("../assets/images/taxi.png"),
+    },
+  ],
+
+  Tempo: [
+    {
+      id: "tempo-1",
+      title: "Tempo Driver",
+      subtitle: "(टेम्पो चालक)",
+      image: require("../assets/images/tempo.png"),
+    },
+    {
+      id: "tempo-2",
+      title: "Goods Carrier",
+      subtitle: "(माल ढुलाई)",
+      image: require("../assets/images/tempo.png"),
+    },
+],
+
+Cleaning: [
+  {
+    id: "clean-labour-1",
+    title: "Cleaning Labour",
+    subtitle: "(सफाई मज़दूर)",
+    image: require("../assets/images/cleaning.png"),
+  },
+  {
+    id: "clean-helper-2",
+    title: "Cleaning Helper",
+    subtitle: "(सफाई सहायक)",
+    image: require("../assets/images/cleaning.png"),
+  },
+],
+
+Food: [
+  {
+    id: "food-labour-1",
+    title: "Kitchen Labour",
+    subtitle: "(रसोई मज़दूर)",
+    image: require("../assets/images/food.png"),
+  },
+  {
+    id: "cook-2",
+    title: "Cook Helper",
+    subtitle: "(रसोई सहायक)",
+    image: require("../assets/images/food.png"),
+  },
+],
+
+Both: [
+  {
+    id: "both-labour-1",
+    title: "Cleaning + Cooking",
+    subtitle: "(सफाई व खाना)",
+    image: require("../assets/images/both.png"),
+  },
+  {
+    id: "both-helper-2",
+    title: "House Helper",
+    subtitle: "(घर सहायक)",
+    image: require("../assets/images/both.png"),
+  },
+],
+
 };
 
 const MAP = {
@@ -91,6 +218,14 @@ const MAP = {
   Plumber: "Plumbing",
   "PVC Fitter": "Plumbing",
   Carpenter: "Construction",
+
+  Rickshaw: "Rickshaw",
+  Taxi: "Taxi",
+  Tempo: "Tempo",
+
+  Cleaning: "Cleaning",
+  Food: "Food",
+  Both: "Both",
 };
 
 export default function LabourJob() {
