@@ -14,6 +14,7 @@ export default function WorkerScreen({ route }) {
   const { hireWorker } = useContext(HireContext);
   // Ideally pass selected worker from previous screen
   const { worker } = route.params;
+  console.log(worker)
 
 
   const [isHired, setIsHired] = useState(false);
@@ -26,6 +27,26 @@ export default function WorkerScreen({ route }) {
 
   return (
     <ScrollView style={detail.container}>
+     
+     {/* HEADER */}
+      <View style={detail.header}>
+        <Image
+          source={require("../../assets/redlogo.png")}
+          style={detail.logo}
+        />
+
+        <TouchableOpacity
+          style={detail.profileIcon}
+          onPress={() => navigation.navigate("Profile")}
+        >
+          <Image
+            source={require("../../assets/images/profile.png")}
+            style={detail.profileImage}
+          />
+        </TouchableOpacity>
+      </View>
+       
+
       <View style={detail.profileCard}>
         <Image
           source={require("../../assets/redlogo.png")}
@@ -80,7 +101,14 @@ export default function WorkerScreen({ route }) {
         <Text style={detail.info}>
           Experience: {worker.experience} years of field experience
         </Text>
+       
+        <Text style={detail.infoTitle}>Price : 
+         <Text style={detail.sub}>{worker.price}</Text>
+        
+        </Text>
+        
 
+        
         <Text style={detail.infoTitle}>Skills:</Text>
         <Text style={detail.info}> • {worker.skills}</Text>
      
@@ -105,6 +133,40 @@ const detail = StyleSheet.create({
     backgroundColor: "#F3DFDF",
     padding: 16,
   },
+
+    header: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 20,
+    marginTop:25
+  },
+  logo: {
+    width: 140,
+    height: 60,
+    alignSelf: "center",
+    marginBottom: 3
+  },
+
+  profileIcon: {
+    width: 54,
+    height: 57,
+    backgroundColor: "#FDECEC",
+    borderRadius: 21,
+    borderWidth: 1.5,
+    borderColor: "#E53935",
+    alignItems: "center",
+    justifyContent: "center",
+    elevation: 2,          // Android shadow
+    shadowColor: "#000",   // iOS shadow
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.15,
+    shadowRadius: 2,
+  },
+  
+  
+
+  
 
   profileCard: {
     backgroundColor: "#FFF4F4",
@@ -196,3 +258,6 @@ const detail = StyleSheet.create({
     color: "#333",
   },
 });
+
+
+
