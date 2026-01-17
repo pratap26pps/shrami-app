@@ -4,23 +4,23 @@ import { useNavigation } from "@react-navigation/native";
 import { TextInput } from "react-native";
 export default function HomeScreen() {
   const navigation = useNavigation();
-const categoryType = [
-  {
-    id: 1,
-    name: "CONSTRUCTION",
-    image: require("../../assets/images/building.png"),
-  },
-  {
-    id: 2,
-    name: "RICKSHAW",
-    image: require("../../assets/images/rickshaw.png"),
-  },
-  {
-    id: 3,
-    name: "HOUSEHELP",
-    image: require("../../assets/images/househelp.png"),
-  },
-];
+  const categoryType = [
+    {
+      id: 1,
+      name: "CONSTRUCTION",
+      image: require("../../assets/images/building.png"),
+    },
+    {
+      id: 2,
+      name: "RICKSHAW",
+      image: require("../../assets/images/rickshaw.png"),
+    },
+    {
+      id: 3,
+      name: "HOUSEHELP",
+      image: require("../../assets/images/househelp.png"),
+    },
+  ];
 
 
 
@@ -29,21 +29,21 @@ const categoryType = [
 
       {/* Header */}
       <View style={styles.header}>
-              <Image
-               source={require("../../assets/redlogo.png")}
-               resizeMode="contain"
-               style={styles.logo}
-             />
-   <TouchableOpacity
-    style={styles.profileIcon}
-    onPress={() => navigation.navigate("Profile")}
-  >
-    <Image
-      source={require("../../assets/images/profile.png")}
-      resizeMode="contain"
-      style={styles.profileImage}
-    />
-  </TouchableOpacity>
+        <Image
+          source={require("../../assets/redlogo.png")}
+          resizeMode="contain"
+          style={styles.logo}
+        />
+        <TouchableOpacity
+          style={styles.profileIcon}
+          onPress={() => navigation.navigate("Profile")}
+        >
+          <Image
+            source={require("../../assets/images/profile.png")}
+            resizeMode="contain"
+            style={styles.profileImage}
+          />
+        </TouchableOpacity>
       </View>
 
       {/* Search
@@ -57,24 +57,24 @@ const categoryType = [
       </View> */}
 
       {/* Search */}
-<View style={styles.searchRow}>
-  <View style={styles.searchBox}>
-    <TextInput
-      placeholder="Search labour..."
-      placeholderTextColor="#999"
-      style={styles.searchInput}
-    />
-  </View>
+      <View style={styles.searchRow}>
+        <View style={styles.searchBox}>
+          <TextInput
+            placeholder="Search labour..."
+            placeholderTextColor="#999"
+            style={styles.searchInput}
+          />
+        </View>
 
-  <View style={styles.filterBtn}>
-    <Feather
-      name="sliders"
-      size={20}
-      color="white"
-      style={{ transform: [{ rotate: "90deg" }] }}
-    />
-  </View>
-</View>
+        <View style={styles.filterBtn}>
+          <Feather
+            name="sliders"
+            size={20}
+            color="white"
+            style={{ transform: [{ rotate: "90deg" }] }}
+          />
+        </View>
+      </View>
 
       {/* Popular */}
       <View style={styles.card}>
@@ -82,17 +82,17 @@ const categoryType = [
 
         <View style={styles.popularRow}>
           {categoryType.map((item) => (
-            <TouchableOpacity key={item?.id} style={styles.popularItem}  onPress={() =>
-           navigation.navigate("LabourJob", { type: item?.name })
-          }>
-             <Image
-               source={item.image}
-               resizeMode="contain"
-               style={styles.logo}
-             />
+            <TouchableOpacity key={item?.id} style={styles.popularItem} onPress={() =>
+              navigation.navigate("LabourJob", { type: item?.name })
+            }>
+              <Image
+                source={item.image}
+                resizeMode="contain"
+                style={styles.logo}
+              />
               <Text style={styles.popularText}>{item?.name}</Text>
             </TouchableOpacity>
-            
+
           ))}
         </View>
       </View>
@@ -117,11 +117,11 @@ const categoryType = [
       <TouchableOpacity style={styles.makeTeamBtn}>
         <Text style={styles.makeTeamText}>MAKE LABOUR TEAM</Text>
         <View style={styles.plusBtn}>
-         <Image
-               source={require("../../assets/images/plus.png")}
-               resizeMode="contain"
-               style={styles.logo}
-             />
+          <Image
+            source={require("../../assets/images/plus.png")}
+            resizeMode="contain"
+            style={styles.logo}
+          />
         </View>
       </TouchableOpacity>
 
@@ -142,28 +142,28 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginBottom: 24,
   },
-logo: {
-  width: 140,
-  height: 60,
-  alignSelf: "center",
-  marginBottom:3
-},
+  logo: {
+    width: 140,
+    height: 60,
+    alignSelf: "center",
+    marginBottom: 3
+  },
 
-profileIcon: {
-  width: 54,
-  height: 57,
-  backgroundColor: "#FDECEC",
-  borderRadius: 21,
-  borderWidth: 1.5,
-  borderColor: "#E53935",
-  alignItems: "center",
-  justifyContent: "center",
-  elevation: 2,          // Android shadow
-  shadowColor: "#000",   // iOS shadow
-  shadowOffset: { width: 0, height: 1 },
-  shadowOpacity: 0.15,
-  shadowRadius: 2,
-},
+  profileIcon: {
+    width: 54,
+    height: 57,
+    backgroundColor: "#FDECEC",
+    borderRadius: 21,
+    borderWidth: 1.5,
+    borderColor: "#E53935",
+    alignItems: "center",
+    justifyContent: "center",
+    elevation: 2,          // Android shadow
+    shadowColor: "#000",   // iOS shadow
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.15,
+    shadowRadius: 2,
+  },
 
   searchRow: {
     flexDirection: "row",
@@ -266,7 +266,7 @@ profileIcon: {
   plusBtn: {
     width: 40,
     height: 40,
-    marginTop:10,
+    marginTop: 10,
     borderRadius: 20,
     alignItems: "center",
     justifyContent: "center",
