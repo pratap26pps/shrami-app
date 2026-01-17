@@ -7,21 +7,42 @@ import {
   StyleSheet,
 } from "react-native";
 import { useRoute } from "@react-navigation/native";
+import { useEffect, useState } from "react";
 
 export default function WorkerListScreen({ navigation }) {
    const route = useRoute();
   const { job } = route.params || {};
+  const [workers,setworkers] = useState([]);
 
-  const workers = Array(5).fill({
-     id: "USER001",
-    quality: job + " work specialist",
-    rating: 4.8,
-    image: require("../../assets/redlogo.png"),
-    name: "Guest User",
-    email: "guest@example.com",
-    mobile: "9999999999",
-    price: 500,
-  });
+
+  const getusersdata  = async ()=>{
+    try{
+        const res = await fetch("http://localhost:5001/api/worker/getWorkers");
+        const result = await res.json();
+        setworkers(result.data);
+        console.log("worker data ",result.data);
+
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  useEffect(() => {
+    getusersdata();
+  }, []);
+
+  const filterworker = workers.filter((worker) => worker.skills.toLowerCase() === job.toLowerCase());
+  console.log("filterworker", filterworker);
+  // const workers = Array(5).fill({
+  //    id: "USER001",
+  //   quality: job + " work specialist",
+  //   rating: 4.8,
+  //   image: require("../../assets/redlogo.png"),
+  //   name: "Guest User",
+  //   email: "guest@example.com",
+  //   mobile: "9999999999",
+  //   price: 500,
+  // });
 
   return (
     <ScrollView style={styles.container}>
@@ -36,7 +57,7 @@ export default function WorkerListScreen({ navigation }) {
       <Text style={styles.heading}>{job}</Text>
 
 
-      {workers.map((item, index) => (
+      {filterworker.map((item, index) => (
         <View key={index} style={styles.card} >
           <Image source={item.image} style={styles.avatar} />
 
