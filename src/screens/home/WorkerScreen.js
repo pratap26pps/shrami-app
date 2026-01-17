@@ -13,11 +13,8 @@ export default function WorkerScreen({ route }) {
 
   const { hireWorker } = useContext(HireContext);
   // Ideally pass selected worker from previous screen
-  const worker = {
-    name: "Name",
-    quality: "Qualities",
-    rating: 4.8,
-  };
+  const { worker } = route.params;
+
 
   const [isHired, setIsHired] = useState(false);
 
@@ -35,8 +32,8 @@ export default function WorkerScreen({ route }) {
           style={detail.profileImg}
         />
 
-        <Text style={detail.name}>Name</Text>
-        <Text style={detail.sub}>Qualities</Text>
+        <Text style={detail.name}>{worker.name}</Text>
+        <Text style={detail.sub}>{worker.skills}</Text>
 
         <TouchableOpacity
           style={[
@@ -55,7 +52,7 @@ export default function WorkerScreen({ route }) {
       {/* Stats */}
    <View style={detail.statsRow}>
   <View style={detail.statCircle}>
-    <Text style={detail.statText}>7+</Text>
+    <Text style={detail.statText}>{worker.experience}+</Text>
     <Text style={detail.statSub}>EXP.</Text>
   </View>
 
@@ -68,39 +65,35 @@ export default function WorkerScreen({ route }) {
   </View>
 
   <View style={detail.statCircle}>
-    <Text style={detail.rating}>⭐ 4.8</Text>
+    <Text style={detail.rating}>⭐ {worker.rating}</Text>
   </View>
 </View>
 
 
       {/* Info */}
       <View style={detail.infoCard}>
-        <Text style={detail.info}>Age: 22–55 years</Text>
-        <Text style={detail.info}>Gender: Male / Female</Text>
+        <Text style={detail.info}>Age: {worker.age} years</Text>
+        <Text style={detail.info}>Gender: {worker.gender}</Text>
         <Text style={detail.info}>
-          Education: Primary to secondary level
+          Education: {worker.education}
         </Text>
         <Text style={detail.info}>
-          Experience: 1–20+ years of field experience
+          Experience: {worker.experience} years of field experience
         </Text>
 
         <Text style={detail.infoTitle}>Skills:</Text>
-        <Text style={detail.info}>• Construction work</Text>
-        <Text style={detail.info}>• Loading & unloading</Text>
-        <Text style={detail.info}>• Plumbing / electrical assistance</Text>
-        <Text style={detail.info}>• Painting & finishing work</Text>
-        <Text style={detail.info}>• Cleaning & maintenance</Text>
-        <Text style={detail.info}>• Farming / factory support</Text>
+        <Text style={detail.info}> • {worker.skills}</Text>
+     
 
         <Text style={detail.info}>
-          Work Type: Daily wage / Contract-based
+          Work Type: {worker.workType}
         </Text>
-        <Text style={detail.info}>Working Hours: 8–10 hours/day</Text>
+        <Text style={detail.info}>Working Hours: {worker.workingHours}</Text>
         <Text style={detail.info}>
-          Physical Ability: High stamina manual labor
+          Physical Ability: {worker.physicalAbility}
         </Text>
         <Text style={detail.info}>
-          Languages: Hindi, regional (basic English optional)
+          Languages: {worker.language}
         </Text>
       </View>
     </ScrollView>
