@@ -11,10 +11,13 @@ import { useNavigation } from "@react-navigation/native";
 import RazorpayPayment from "../../components/RazorpayPayment";
 import { useContext } from "react";
 import { HireContext } from "../../context/HireContext";
+import { AuthContext } from "../../context/AuthContext";
 export default function CheckoutScreen() {
   const navigation = useNavigation();
   const [showPay, setShowPay] = useState(false);
   const { hiredWorkers } = useContext(HireContext);
+  const { user } = useContext(AuthContext);
+  console.log("user",user)
     // 👇 add dummy values here
  
  console.log("hiredWorkers",hiredWorkers)
@@ -72,7 +75,7 @@ export default function CheckoutScreen() {
 
           <View style={styles.billRow}>
             <Text>Items total</Text>
-            <Text>5458</Text>
+            <Text>₹ {hiredWorkers[0]?.price}</Text>
           </View>
 
           <View style={styles.billRow}>
@@ -87,7 +90,7 @@ export default function CheckoutScreen() {
 
           <View style={styles.totalBar}>
             <View>
-              <Text style={styles.totalAmount}>₹ {hiredWorkers.price|| 300}</Text>
+              <Text style={styles.totalAmount}>₹ {hiredWorkers[0]?.price}</Text>      
               <Text style={styles.totalLabel}>Total</Text>
             </View>
 
@@ -103,9 +106,9 @@ export default function CheckoutScreen() {
 
       <RazorpayPayment
         visible={showPay}
-        amount={hiredWorkers.price || 4}
+        amount={hiredWorkers[0]?.price}
         orderData={orderData}
-        customerInfo={hiredWorkers}
+        customerInfo={{...user }}
         onSuccess={(data) => {
           console.log("paid", data);
           setShowPay(false);

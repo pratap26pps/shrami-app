@@ -44,10 +44,10 @@ const RazorpayPayment = ({
             amount,
             receipt: `order_${Date.now()}`,
             notes: {
-              orderId: orderData.orderId,
-              customerId: customerInfo.id || customerInfo._id,
-              customerName: customerInfo.name,
-              customerEmail: customerInfo.email,
+              orderId: orderData?.orderId,
+              customerId: customerInfo?.id || customerInfo?._id,
+              customerName: customerInfo?.fullName,
+             
             },
           }),
         }
@@ -68,9 +68,9 @@ const RazorpayPayment = ({
         order_id: orderResult.data.orderId,
         name: "Shrami",
         prefill: {
-          name: customerInfo.name,
-          email: customerInfo.email,
-          contact: customerInfo.mobile,
+          name: customerInfo?.fullName,
+          
+          contact: customerInfo?.ContactNumber,
         },
         theme: { color: "#059669" },
       };
@@ -87,10 +87,10 @@ const RazorpayPayment = ({
                   razorpay_order_id: response.razorpay_order_id,
                   razorpay_payment_id: response.razorpay_payment_id,
                   razorpay_signature: response.razorpay_signature,
-                  order_id: orderData._id || orderData.id,
+                  order_id: orderData?._id || orderData?.id,
                   amount: orderResult.data.amount,
-                  customerName: customerInfo.name,
-                  customerMobile: customerInfo.mobile,
+                  customerName: customerInfo?.fullName,
+                  customerMobile: customerInfo?.ContactNumber,
                 }),
               }
             );
@@ -103,7 +103,7 @@ const RazorpayPayment = ({
               Alert.alert("Success", "Payment Successful!");
               onSuccess({
                 ...response,
-                orderId: orderData._id || orderData.id,
+                orderId: orderData?._id || orderData?.id,
                 amount,
               });
                 navigation.navigate("Payment");
@@ -176,9 +176,9 @@ const RazorpayPayment = ({
             <View style={styles.details}>
               <Text>Amount: ₹{amount}</Text>
               <Text>Order ID: {orderData?.orderId}</Text>
-              <Text>Customer: {customerInfo?.name}</Text>
-              <Text>Email: {customerInfo?.email}</Text>
-              <Text>Phone: {customerInfo?.mobile}</Text>
+              <Text>Customer: {customerInfo?.fullName}</Text>
+        
+              <Text>Phone: {customerInfo?.ContactNumber}</Text>
             </View>
           )}
 
