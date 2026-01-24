@@ -4,13 +4,26 @@
     "slug": "shrami",
     "scheme": "shrami",
     "plugins": [
-      "expo-secure-store"
+      "expo-secure-store",
+      [
+        "expo-location",
+        {
+          "locationWhenInUsePermission": "This app needs access to your location to show your current position on the map and help you find nearby drivers.",
+          "locationAlwaysAndWhenInUsePermission": "This app needs access to your location to show your current position on the map and help you find nearby drivers.",
+          "locationAlwaysPermission": "This app needs access to your location to show your current position on the map and help you find nearby drivers."
+        }
+      ]
     ],
     "android": {
       "package": "com.pratap26pps.shrami"
     },
     "ios": {
-      "bundleIdentifier": "com.pratap26pps.shrami"
+      "bundleIdentifier": "com.pratap26pps.shrami",
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "This app needs access to your location to show your current position on the map and help you find nearby drivers.",
+        "NSLocationAlwaysAndWhenInUseUsageDescription": "This app needs access to your location to show your current position on the map and help you find nearby drivers.",
+        "NSLocationAlwaysUsageDescription": "This app needs access to your location to show your current position on the map and help you find nearby drivers."
+      }
     }
   }
 }

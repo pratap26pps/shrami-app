@@ -47,6 +47,12 @@
     </dict>
     <key>NSFaceIDUsageDescription</key>
     <string>Allow $(PRODUCT_NAME) to access your Face ID biometric data.</string>
+    <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+    <string>This app needs access to your location to show your current position on the map and help you find nearby drivers.</string>
+    <key>NSLocationAlwaysUsageDescription</key>
+    <string>This app needs access to your location to show your current position on the map and help you find nearby drivers.</string>
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>This app needs access to your location to show your current position on the map and help you find nearby drivers.</string>
     <key>RCTNewArchEnabled</key>
     <true/>
     <key>UILaunchStoryboardName</key>

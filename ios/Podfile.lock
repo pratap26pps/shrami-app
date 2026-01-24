@@ -4,7 +4,7 @@ PODS:
   - EXFirebaseCore (6.0.0):
     - ExpoModulesCore
     - Firebase/Core (= 9.5.0)
-  - Expo (54.0.30):
+  - Expo (54.0.31):
     - ExpoModulesCore
     - hermes-engine
     - RCTRequired
@@ -38,6 +38,8 @@ PODS:
   - ExpoKeepAwake (15.0.8):
     - ExpoModulesCore
   - ExpoLinking (8.0.11):
+    - ExpoModulesCore
+  - ExpoLocation (19.0.8):
     - ExpoModulesCore
   - ExpoModulesCore (3.0.29):
     - hermes-engine
@@ -2141,6 +2143,7 @@ DEPENDENCIES:
   - ExpoFont (from `../node_modules/expo-font/ios`)
   - ExpoKeepAwake (from `../node_modules/expo/node_modules/expo-keep-awake/ios`)
   - ExpoLinking (from `../node_modules/expo-linking/ios`)
+  - ExpoLocation (from `../node_modules/expo-location/ios`)
   - ExpoModulesCore (from `../node_modules/expo-modules-core`)
   - ExpoSecureStore (from `../node_modules/expo-secure-store/ios`)
   - FBLazyVector (from `../node_modules/react-native/Libraries/FBLazyVector`)
@@ -2254,6 +2257,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/expo/node_modules/expo-keep-awake/ios"
   ExpoLinking:
     :path: "../node_modules/expo-linking/ios"
+  ExpoLocation:
+    :path: "../node_modules/expo-location/ios"
   ExpoModulesCore:
     :path: "../node_modules/expo-modules-core"
   ExpoSecureStore:
@@ -2415,12 +2420,13 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   EXConstants: 25bb3ab88d4a5455acaad2f4f28175d1d61c58a1
   EXFirebaseCore: 9317761d8089bad0e2e39e6ba1ae24217cc8ff02
-  Expo: 60c21ba34593688a2a6e8445c1f8b44abb0e3fae
+  Expo: 04993fbd7b06dc98ffac58da8847298470dc3db1
   ExpoAsset: f867e55ceb428aab99e1e8c082b5aee7c159ea18
   ExpoFileSystem: 858a44267a3e6e9057e0888ad7c7cfbf55d52063
   ExpoFont: 35ac6191ed86bbf56b3ebd2d9154eda9fad5b509
   ExpoKeepAwake: 55f75eca6499bb9e4231ebad6f3e9cb8f99c0296
   ExpoLinking: 8f0aaf69aa56f832913030503b6263dc6f647f37
+  ExpoLocation: d5b61cb4970fa982e39ca94246a206a0c3b812ca
   ExpoModulesCore: f3da4f1ab5a8375d0beafab763739dbee8446583
   ExpoSecureStore: d32f751874a2ceb5aaeebeb3578e165c1ba2b24a
   FBLazyVector: e95a291ad2dadb88e42b06e0c5fb8262de53ec12
@@ -2513,6 +2519,6 @@ SPEC CHECKSUMS:
   RNWorklets: 9eb6d567fa43984e96b6924a6df504b8a15980cd
   Yoga: 5934998fbeaef7845dbf698f698518695ab4cd1a
 
-PODFILE CHECKSUM: f66a05e6ee87e4f745c228e7ec68ab6f0c511a51
+PODFILE CHECKSUM: a670a375d186e4c1c3d25fa06e92475de11e818a
 
 COCOAPODS: 1.16.2

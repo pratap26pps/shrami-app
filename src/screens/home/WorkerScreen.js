@@ -8,9 +8,11 @@ import {
 } from "react-native";
 import { useContext, useState } from "react";
 import { HireContext } from "../../context/HireContext";
+import { useNavigation } from "@react-navigation/native";
 
 export default function WorkerScreen({ route }) {
 
+  const navigation = useNavigation();
   const { hireWorker } = useContext(HireContext);
   // Ideally pass selected worker from previous screen
   const { worker } = route.params;

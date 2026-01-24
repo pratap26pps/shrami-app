@@ -270,7 +270,9 @@ export default function LabourJob() {
                   style={styles.searchText}
                 />
               </View>
-              <TouchableOpacity style={styles.filterBtn}>
+              <TouchableOpacity 
+              onPress={() => navigation.navigate("MapScreen")}
+              style={styles.filterBtn}>
                 <Feather
                   name="sliders"
                   size={20}
