@@ -19,7 +19,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useNavigation } from "@react-navigation/native";
 
-const GOOGLE_API_KEY = "AIzaSyCtHxr5ntfq1raK8o-R1rW0GiDGAOR4bGo";
+const GOOGLE_API_KEY = process.env.GOOGLE_API_KEY;
 
 const ROUTE_COLORS = {
   shadow: "rgba(0, 122, 255, 0.28)",
