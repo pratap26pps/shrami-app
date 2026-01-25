@@ -1,6 +1,7 @@
 import * as Linking from "expo-linking";
 import { useEffect, useContext } from "react";
 import { NavigationContainer } from "@react-navigation/native";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 import RootNavigator from "./src/navigation/RootNavigator";
 import { AuthProvider, AuthContext } from "./src/context/AuthContext";
 import { HireProvider } from "./src/context/HireContext";
@@ -59,14 +60,15 @@ const linking = {
 
 export default function App() {
   return (
-    <AuthProvider>
-      <HireProvider>
-      <NavigationContainer linking={linking}>
-        <DeepLinkHandler />
-        <RootNavigator />
-      </NavigationContainer>
-      </HireProvider>
-     
-    </AuthProvider>
+    <SafeAreaProvider>
+      <AuthProvider>
+        <HireProvider>
+          <NavigationContainer linking={linking}>
+            <DeepLinkHandler />
+            <RootNavigator />
+          </NavigationContainer>
+        </HireProvider>
+      </AuthProvider>
+    </SafeAreaProvider>
   );
 }

@@ -43,7 +43,7 @@ export default function WorkerScreen({ route }) {
         >
           <Image
             source={require("../../assets/images/profile.png")}
-            style={detail.profileImage}
+            style={detail?.profileImg}
           />
         </TouchableOpacity>
       </View>
@@ -52,78 +52,78 @@ export default function WorkerScreen({ route }) {
       <View style={detail.profileCard}>
         <Image
           source={require("../../assets/redlogo.png")}
-          style={detail.profileImg}
+          style={detail?.profileImg}
         />
 
-        <Text style={detail.name}>{worker.name}</Text>
-        <Text style={detail.sub}>{worker.skills}</Text>
+        <Text style={detail?.name}>{worker.name}</Text>
+        <Text style={detail?.sub}>{worker.skills}</Text>
 
         <TouchableOpacity
           style={[
-            detail.hireBtn,
+            detail?.hireBtn,
             { backgroundColor: isHired ? "#4CAF50" : "#E53935" },
           ]}
           disabled={isHired}
           onPress={handleHire}
         >
-          <Text style={detail.hireText}>
+          <Text style={detail?.hireText}>
             {isHired ? "HIRED" : "HIRE"}
           </Text>
         </TouchableOpacity>
       </View>
 
       {/* Stats */}
-   <View style={detail.statsRow}>
-  <View style={detail.statCircle}>
-    <Text style={detail.statText}>{worker.experience}+</Text>
-    <Text style={detail.statSub}>EXP.</Text>
+   <View style={detail?.statsRow}>
+  <View style={detail?.statCircle}>
+    <Text style={detail?.statText}>{worker?.experience}+</Text>
+    <Text style={detail?.statSub}>EXP.</Text>
   </View>
 
-  <View style={detail.statCircle}>
-    <Text style={detail.statText}>👤</Text>
+  <View style={detail?.statCircle}>
+    <Text style={detail?.statText}>👤</Text>
   </View>
 
-  <View style={detail.statCircle}>
-    <Text style={detail.statText}>🪪</Text>
+  <View style={detail?.statCircle}>
+    <Text style={detail?.statText}>🪪</Text>
   </View>
 
-  <View style={detail.statCircle}>
-    <Text style={detail.rating}>⭐ {worker.rating}</Text>
+  <View style={detail?.statCircle}>
+    <Text style={detail?.rating}>⭐ {worker.rating}</Text>
   </View>
 </View>
 
 
       {/* Info */}
-      <View style={detail.infoCard}>
-        <Text style={detail.info}>Age: {worker.age} years</Text>
-        <Text style={detail.info}>Gender: {worker.gender}</Text>
-        <Text style={detail.info}>
+      <View style={detail?.infoCard}>
+        <Text style={detail?.info}>Age: {worker?.age} years</Text>
+        <Text style={detail?.info}>Gender: {worker?.gender}</Text>
+        <Text style={detail?.info}>
           Education: {worker.education}
         </Text>
-        <Text style={detail.info}>
+        <Text style={detail?.info}>
           Experience: {worker.experience} years of field experience
         </Text>
        
-        <Text style={detail.infoTitle}>Price : 
-         <Text style={detail.sub}>{worker.price}</Text>
+        <Text style={detail?.infoTitle}>Price : 
+         <Text style={detail?.sub}>{worker?.price}</Text>
         
         </Text>
         
 
         
-        <Text style={detail.infoTitle}>Skills:</Text>
-        <Text style={detail.info}> • {worker.skills}</Text>
+        <Text style={detail?.infoTitle}>Skills:</Text>
+        <Text style={detail?.info}> • {worker?.skills}</Text>
      
 
-        <Text style={detail.info}>
-          Work Type: {worker.workType}
+        <Text style={detail?.info}>
+          Work Type: {worker?.workType}
         </Text>
-        <Text style={detail.info}>Working Hours: {worker.workingHours}</Text>
-        <Text style={detail.info}>
-          Physical Ability: {worker.physicalAbility}
+        <Text style={detail?.info}>Working Hours: {worker?.workingHours}</Text>
+        <Text style={detail?.info}>
+          Physical Ability: {worker?.physicalAbility}
         </Text>
-        <Text style={detail.info}>
-          Languages: {worker.language}
+        <Text style={detail?.info}>
+          Languages: {worker?.language}
         </Text>
       </View>
     </ScrollView>
