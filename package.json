@@ -4,7 +4,10 @@
   "main": "node_modules/expo/AppEntry.js",
   "expo": {
     "autolinking": {
-      "exclude": ["expo-firebase-core", "expo-firebase-recaptcha"]
+      "exclude": [
+        "expo-firebase-core",
+        "expo-firebase-recaptcha"
+      ]
     }
   },
   "scripts": {
@@ -24,6 +27,7 @@
     "axios": "^1.13.2",
     "expo": "~54.0.32",
     "expo-constants": "~18.0.13",
+    "expo-dev-client": "~6.0.20",
     "expo-firebase-core": "^6.0.0",
     "expo-firebase-recaptcha": "^2.3.1",
     "expo-linking": "~8.0.11",

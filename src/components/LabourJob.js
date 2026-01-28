@@ -291,8 +291,7 @@ renderItem={({ item }) => (
   <View style={styles.categorySection}>
     <Text style={styles.sectionTitle}>{item.name}</Text>
 
-    <FlatList
-      data={SUBJOBS[MAP[item.name]] || []}
+    <FlatList data={SUBJOBS[MAP[item.name]] || []}
       keyExtractor={(s) => s.id}
       horizontal
       showsHorizontalScrollIndicator={false}

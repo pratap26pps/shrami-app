@@ -27,8 +27,14 @@
       <dict>
         <key>CFBundleURLSchemes</key>
         <array>
-          <string>shrami</string>
+          <string>shramiapp</string>
           <string>com.pratap26pps.shrami</string>
+        </array>
+      </dict>
+      <dict>
+        <key>CFBundleURLSchemes</key>
+        <array>
+          <string>exp+shrami</string>
         </array>
       </dict>
     </array>

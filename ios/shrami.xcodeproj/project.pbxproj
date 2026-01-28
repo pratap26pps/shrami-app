@@ -7,26 +7,26 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0CED9FAF1E328B5ACB0E9CFA /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BAEBF134AF56A387FAF063D /* ExpoModulesProvider.swift */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */; };
-		74BA13486CA757A16196674F /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72828B37079CBAD28F9A6D18 /* ExpoModulesProvider.swift */; };
-		879D185F2B174BA4461A5DAD /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 42B19090390DD06E03FD539E /* PrivacyInfo.xcprivacy */; };
-		B638D20EB0A75CBB8B974FD7 /* libPods-shrami.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 28E08B3371287288782158A1 /* libPods-shrami.a */; };
+		6EF5A7CC257B4045571A9606 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = AC3788C88EECA79B83696844 /* PrivacyInfo.xcprivacy */; };
 		BB2F792D24A3F905000567C9 /* Expo.plist in Resources */ = {isa = PBXBuildFile; fileRef = BB2F792C24A3F905000567C9 /* Expo.plist */; };
 		F11748422D0307B40044C1D9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F11748412D0307B40044C1D9 /* AppDelegate.swift */; };
+		FA12C7B1241746A0FEAC8190 /* libPods-shrami.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7842DA5356B4BBBCCDDF3256 /* libPods-shrami.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		13B07F961A680F5B00A75B9A /* shrami.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = shrami.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = shrami/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = shrami/Info.plist; sourceTree = "<group>"; };
-		28E08B3371287288782158A1 /* libPods-shrami.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-shrami.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		42B19090390DD06E03FD539E /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; name = PrivacyInfo.xcprivacy; path = shrami/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
-		72828B37079CBAD28F9A6D18 /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-shrami/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
+		4BAEBF134AF56A387FAF063D /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-shrami/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
+		7842DA5356B4BBBCCDDF3256 /* libPods-shrami.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-shrami.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		933C9D91EB4B2CA7D3B56BE4 /* Pods-shrami.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-shrami.debug.xcconfig"; path = "Target Support Files/Pods-shrami/Pods-shrami.debug.xcconfig"; sourceTree = "<group>"; };
 		AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = SplashScreen.storyboard; path = shrami/SplashScreen.storyboard; sourceTree = "<group>"; };
+		AC3788C88EECA79B83696844 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; name = PrivacyInfo.xcprivacy; path = shrami/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		AE995D3CF8CF1D690F2145AA /* Pods-shrami.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-shrami.release.xcconfig"; path = "Target Support Files/Pods-shrami/Pods-shrami.release.xcconfig"; sourceTree = "<group>"; };
 		BB2F792C24A3F905000567C9 /* Expo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Expo.plist; sourceTree = "<group>"; };
-		CAC3CEF25B6A9F78C716E2FC /* Pods-shrami.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-shrami.debug.xcconfig"; path = "Target Support Files/Pods-shrami/Pods-shrami.debug.xcconfig"; sourceTree = "<group>"; };
-		CD9F788BAD96DCA5B154173B /* Pods-shrami.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-shrami.release.xcconfig"; path = "Target Support Files/Pods-shrami/Pods-shrami.release.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		F11748412D0307B40044C1D9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = shrami/AppDelegate.swift; sourceTree = "<group>"; };
 		F11748442D0722820044C1D9 /* shrami-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "shrami-Bridging-Header.h"; path = "shrami/shrami-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -37,21 +37,13 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B638D20EB0A75CBB8B974FD7 /* libPods-shrami.a in Frameworks */,
+				FA12C7B1241746A0FEAC8190 /* libPods-shrami.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		085765AB39A70B37580B4CF5 /* shrami */ = {
-			isa = PBXGroup;
-			children = (
-				72828B37079CBAD28F9A6D18 /* ExpoModulesProvider.swift */,
-			);
-			name = shrami;
-			sourceTree = "<group>";
-		};
 		13B07FAE1A68108700A75B9A /* shrami */ = {
 			isa = PBXGroup;
 			children = (
@@ -61,28 +53,28 @@
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */,
-				42B19090390DD06E03FD539E /* PrivacyInfo.xcprivacy */,
+				AC3788C88EECA79B83696844 /* PrivacyInfo.xcprivacy */,
 			);
 			name = shrami;
+			sourceTree = "<group>";
+		};
+		1C627A4CC46A36673E0C74E0 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				933C9D91EB4B2CA7D3B56BE4 /* Pods-shrami.debug.xcconfig */,
+				AE995D3CF8CF1D690F2145AA /* Pods-shrami.release.xcconfig */,
+			);
+			name = Pods;
+			path = Pods;
 			sourceTree = "<group>";
 		};
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
-				28E08B3371287288782158A1 /* libPods-shrami.a */,
+				7842DA5356B4BBBCCDDF3256 /* libPods-shrami.a */,
 			);
 			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		62329C9523C5A4445A545B52 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				CAC3CEF25B6A9F78C716E2FC /* Pods-shrami.debug.xcconfig */,
-				CD9F788BAD96DCA5B154173B /* Pods-shrami.release.xcconfig */,
-			);
-			name = Pods;
-			path = Pods;
 			sourceTree = "<group>";
 		};
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
@@ -99,8 +91,8 @@
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
-				62329C9523C5A4445A545B52 /* Pods */,
-				A25E061ED846AD63CEC5988C /* ExpoModulesProviders */,
+				1C627A4CC46A36673E0C74E0 /* Pods */,
+				A69993F3C07E5893AEF2AA5F /* ExpoModulesProviders */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -115,10 +107,18 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		A25E061ED846AD63CEC5988C /* ExpoModulesProviders */ = {
+		8B30587BFBDA064DCBD7B534 /* shrami */ = {
 			isa = PBXGroup;
 			children = (
-				085765AB39A70B37580B4CF5 /* shrami */,
+				4BAEBF134AF56A387FAF063D /* ExpoModulesProvider.swift */,
+			);
+			name = shrami;
+			sourceTree = "<group>";
+		};
+		A69993F3C07E5893AEF2AA5F /* ExpoModulesProviders */ = {
+			isa = PBXGroup;
+			children = (
+				8B30587BFBDA064DCBD7B534 /* shrami */,
 			);
 			name = ExpoModulesProviders;
 			sourceTree = "<group>";
@@ -140,13 +140,13 @@
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "shrami" */;
 			buildPhases = (
 				08A4A3CD28434E44B6B9DE2E /* [CP] Check Pods Manifest.lock */,
-				47D9C297D55C6B0970C15ADC /* [Expo] Configure project */,
+				126C23BE51BB8335DCDF2B6C /* [Expo] Configure project */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
 				800E24972A6A228C8D4807E9 /* [CP] Copy Pods Resources */,
-				1DCCB4B8387F94EEAF81E4E1 /* [CP] Embed Pods Frameworks */,
+				67BCAE490F3208ECB3E04409 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -196,7 +196,7 @@
 				BB2F792D24A3F905000567C9 /* Expo.plist in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */,
-				879D185F2B174BA4461A5DAD /* PrivacyInfo.xcprivacy in Resources */,
+				6EF5A7CC257B4045571A9606 /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -242,7 +242,31 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		1DCCB4B8387F94EEAF81E4E1 /* [CP] Embed Pods Frameworks */ = {
+		126C23BE51BB8335DCDF2B6C /* [Expo] Configure project */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/.xcode.env",
+				"$(SRCROOT)/.xcode.env.local",
+				"$(SRCROOT)/shrami/shrami.entitlements",
+				"$(SRCROOT)/Pods/Target Support Files/Pods-shrami/expo-configure-project.sh",
+			);
+			name = "[Expo] Configure project";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(SRCROOT)/Pods/Target Support Files/Pods-shrami/ExpoModulesProvider.swift",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# This script configures Expo modules and generates the modules provider file.\nbash -l -c \"./Pods/Target\\ Support\\ Files/Pods-shrami/expo-configure-project.sh\"\n";
+		};
+		67BCAE490F3208ECB3E04409 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -270,30 +294,6 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-shrami/Pods-shrami-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		47D9C297D55C6B0970C15ADC /* [Expo] Configure project */ = {
-			isa = PBXShellScriptBuildPhase;
-			alwaysOutOfDate = 1;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"$(SRCROOT)/.xcode.env",
-				"$(SRCROOT)/.xcode.env.local",
-				"$(SRCROOT)/shrami/shrami.entitlements",
-				"$(SRCROOT)/Pods/Target Support Files/Pods-shrami/expo-configure-project.sh",
-			);
-			name = "[Expo] Configure project";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(SRCROOT)/Pods/Target Support Files/Pods-shrami/ExpoModulesProvider.swift",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# This script configures Expo modules and generates the modules provider file.\nbash -l -c \"./Pods/Target\\ Support\\ Files/Pods-shrami/expo-configure-project.sh\"\n";
-		};
 		800E24972A6A228C8D4807E9 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -307,7 +307,8 @@
 				"${PODS_CONFIGURATION_BUILD_DIR}/RNCAsyncStorage/RNCAsyncStorage_resources.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/React-Core/React-Core_privacy.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/React-cxxreact/React-cxxreact_privacy.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/react-native-maps/ReactNativeMapsPrivacy.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/expo-dev-launcher/EXDevLauncher.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/expo-dev-menu/EXDevMenu.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
@@ -317,7 +318,8 @@
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/RNCAsyncStorage_resources.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/React-Core_privacy.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/React-cxxreact_privacy.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/ReactNativeMapsPrivacy.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/EXDevLauncher.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/EXDevMenu.bundle",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -332,7 +334,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F11748422D0307B40044C1D9 /* AppDelegate.swift in Sources */,
-				74BA13486CA757A16196674F /* ExpoModulesProvider.swift in Sources */,
+				0CED9FAF1E328B5ACB0E9CFA /* ExpoModulesProvider.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -341,7 +343,7 @@
 /* Begin XCBuildConfiguration section */
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = CAC3CEF25B6A9F78C716E2FC /* Pods-shrami.debug.xcconfig */;
+			baseConfigurationReference = 933C9D91EB4B2CA7D3B56BE4 /* Pods-shrami.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -377,7 +379,7 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = CD9F788BAD96DCA5B154173B /* Pods-shrami.release.xcconfig */;
+			baseConfigurationReference = AE995D3CF8CF1D690F2145AA /* Pods-shrami.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;

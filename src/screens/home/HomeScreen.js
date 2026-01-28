@@ -1,9 +1,18 @@
-import { View, Text, Image, TouchableOpacity, ScrollView, StyleSheet, } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  ScrollView,
+  StyleSheet,
+  FlatList,
+} from "react-native";
 import { Feather } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { TextInput } from "react-native";
 export default function HomeScreen() {
   const navigation = useNavigation();
+
   const categoryType = [
     {
       id: 1,
@@ -22,11 +31,23 @@ export default function HomeScreen() {
     },
   ];
 
-
+  const TOP_PICKS = [
+    {
+      id: "1",
+      title: "Labour",
+      subtitle: "(मजदूर)",
+      image: require("../../assets/images/househelp.png"),
+    },
+    {
+      id: "2",
+      title: "Electrician",
+      subtitle: "(बिजली मिस्त्री)",
+      image: require("../../assets/images/househelp.png"),
+    },
+  ];
 
   return (
     <ScrollView style={styles.container}>
-
       {/* Header */}
       <View style={styles.header}>
         <Image
@@ -45,16 +66,6 @@ export default function HomeScreen() {
           />
         </TouchableOpacity>
       </View>
-
-      {/* Search
-      <View style={styles.searchRow}>
-        <View style={styles.searchBox}>
-          <TextInput style={styles.searchText}>Search labour...</TextInput>
-        </View>
-        <View style={styles.filterBtn}>
-          <Feather name="sliders" size={20} color="white"   style={{ transform: [{ rotate: "90deg" }] }}/>
-        </View>
-      </View> */}
 
       {/* Search */}
       <View style={styles.searchRow}>
@@ -82,9 +93,13 @@ export default function HomeScreen() {
 
         <View style={styles.popularRow}>
           {categoryType.map((item) => (
-            <TouchableOpacity key={item?.id} style={styles.popularItem} onPress={() =>
-              navigation.navigate("LabourJob", { type: item?.name })
-            }>
+            <TouchableOpacity
+              key={item?.id}
+              style={styles.popularItem}
+              onPress={() =>
+                navigation.navigate("LabourJob", { type: item?.name })
+              }
+            >
               <Image
                 source={item.image}
                 resizeMode="contain"
@@ -92,7 +107,6 @@ export default function HomeScreen() {
               />
               <Text style={styles.popularText}>{item?.name}</Text>
             </TouchableOpacity>
-
           ))}
         </View>
       </View>
@@ -100,18 +114,28 @@ export default function HomeScreen() {
       {/* Top Picks */}
       <Text style={styles.sectionTitle}>Top Picks</Text>
 
-      <View style={styles.topPickCard}>
-        <Image
-          source={require("../../assets/images/construction.png")}
-          style={styles.topPickImage}
-        />
-        <View style={styles.topPickFooter}>
-          <Text style={styles.topPickText}>
-            Labour <Text style={styles.grayText}>(मजदूर)</Text>
-          </Text>
-          <Feather name="arrow-right" size={22} color="#E53935" />
-        </View>
-      </View>
+      <FlatList data={TOP_PICKS}
+        horizontal
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => (
+          <TouchableOpacity
+            style={styles.topPickCard}
+            onPress={() =>
+              navigation.navigate("WorkerListScreen", { job: item.title })
+            }
+          >
+            <Image source={item.image} style={styles.topPickImage} />
+
+            <View style={styles.topPickFooter}>
+              <Text style={styles.topPickText}>
+                {item.title}{" "}
+                <Text style={styles.grayText}>{item.subtitle}</Text>
+              </Text>
+              <Feather name="arrow-right" size={22} color="#E53935" />
+            </View>
+          </TouchableOpacity>
+        )}
+      />
 
       {/* Make Labour Team */}
       <TouchableOpacity style={styles.makeTeamBtn}>
@@ -124,7 +148,6 @@ export default function HomeScreen() {
           />
         </View>
       </TouchableOpacity>
-
     </ScrollView>
   );
 }
@@ -146,7 +169,7 @@ const styles = StyleSheet.create({
     width: 140,
     height: 60,
     alignSelf: "center",
-    marginBottom: 3
+    marginBottom: 3,
   },
 
   profileIcon: {
@@ -158,8 +181,8 @@ const styles = StyleSheet.create({
     borderColor: "#E53935",
     alignItems: "center",
     justifyContent: "center",
-    elevation: 2,          // Android shadow
-    shadowColor: "#000",   // iOS shadow
+    elevation: 2, // Android shadow
+    shadowColor: "#000", // iOS shadow
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.15,
     shadowRadius: 2,

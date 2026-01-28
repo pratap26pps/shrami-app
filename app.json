@@ -2,7 +2,17 @@
   "expo": {
     "name": "shrami",
     "slug": "shrami",
-    "scheme": "shrami",
+   "scheme": "shramiapp",
+
+
+   "icon": "./src/assets/appicon.png",  
+
+    "splash": {
+      "image": "./src/assets/appicon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+
     "plugins": [
       "expo-secure-store",
       [
