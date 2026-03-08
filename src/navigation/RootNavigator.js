@@ -19,6 +19,7 @@ import MapScreen from "../screens/home/MapScreen";
 import LabourTeamScreen from "../screens/home/LabourTeamScreen";
 import HiredWorkersScreen from "../screens/contractorAction/hired/HiredWorkersScreen";
 import RickshawDriverListScreen from "../screens/contractorAction/rickshaw/RickshawDriverListScreen";
+import AboutUsScreen from "../screens/profile/AboutUsScreen";
 const Stack = createNativeStackNavigator();
 
 export default function RootNavigator() {
@@ -40,6 +41,7 @@ export default function RootNavigator() {
         <Stack.Screen name="LabourJob" component={LabourJob} />
         <Stack.Screen name="RazorpayPayment" component={RazorpayPayment} />
         <Stack.Screen name="Profile" component={ProfileScreen} />
+        <Stack.Screen name="AboutUs" component={AboutUsScreen} />
         <Stack.Screen name="WorkerListScreen" component={WorkerListScreen} />
         <Stack.Screen name="LabourTeamScreen" component={LabourTeamScreen} />
         <Stack.Screen name="HiredWorkers" component={HiredWorkersScreen} />

@@ -80,7 +80,7 @@ export default function ProfileScreen() {
         {[
           { id: 1, label: "Cart", icon: require("../../assets/images/cart.png"), screen: "CheckoutScreen" },
           { id: 2, label: "Payments", icon: require("../../assets/images/payments.png"), screen: "Payment" },
-          { id: 3, label: "Work Status", icon: require("../../assets/images/workstatus.png"), screen: "Worker" },
+          { id: 3, label: "About Us", icon: require("../../assets/images/workstatus.png"), screen: "AboutUs" },
           { id: 4, label: "Hired", icon: require("../../assets/images/hired.png"), screen: "HiredWorkers" },
         ].map((item) => (
           <TouchableOpacity
