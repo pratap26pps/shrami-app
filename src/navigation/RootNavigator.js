@@ -17,6 +17,7 @@ import ProfileScreen from "../screens/home/ProfileScreen";
 import WorkerListScreen from "../screens/home/SearchScreen";
 import MapScreen from "../screens/home/MapScreen";
 import LabourTeamScreen from "../screens/home/LabourTeamScreen";
+import HiredWorkersScreen from "../screens/contractorAction/hired/HiredWorkersScreen";
 const Stack = createNativeStackNavigator();
 
 export default function RootNavigator() {
@@ -40,6 +41,7 @@ export default function RootNavigator() {
         <Stack.Screen name="Profile" component={ProfileScreen} />
         <Stack.Screen name="WorkerListScreen" component={WorkerListScreen} />
         <Stack.Screen name="LabourTeamScreen" component={LabourTeamScreen} />
+        <Stack.Screen name="HiredWorkers" component={HiredWorkersScreen} />
         <Stack.Screen name="MapScreen" component={MapScreen} />
         </>
    

@@ -11,6 +11,7 @@ import {
 
 import RazorpayCheckout from "react-native-razorpay";
 import { useNavigation, NavigationProp } from "@react-navigation/native";
+import { API_BASE } from "../config/api";
 
 type RootStackParamList = {
   CheckoutScreen: undefined;
@@ -36,7 +37,7 @@ const RazorpayPayment = ({
       setPaymentStatus("processing");
 
       const orderResponse = await fetch(
-        "https://shrami-backend.onrender.com/api/worker/CreateOrder",
+        `${API_BASE}/api/worker/CreateOrder`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -68,9 +69,8 @@ const RazorpayPayment = ({
         order_id: orderResult.data.orderId,
         name: "Shrami",
         prefill: {
-          name: customerInfo?.fullName,
-          
-          contact: customerInfo?.ContactNumber,
+          name: customerInfo?.fullName || "Customer",
+          contact: String(customerInfo?.ContactNumber || customerInfo?.phone || "9999999999"),
         },
         theme: { color: "#059669" },
       };
@@ -79,7 +79,7 @@ const RazorpayPayment = ({
         .then(async (response) => {
           try {
             const verifyResponse = await fetch(
-              "https://shrami-backend.onrender.com/api/worker/VerifyPayments",
+              `${API_BASE}/api/worker/VerifyPayments`,
               {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -87,10 +87,10 @@ const RazorpayPayment = ({
                   razorpay_order_id: response.razorpay_order_id,
                   razorpay_payment_id: response.razorpay_payment_id,
                   razorpay_signature: response.razorpay_signature,
-                  order_id: orderData?._id || orderData?.id,
+                  order_id: orderData?._id || orderData?.id || response.razorpay_order_id,
                   amount: orderResult.data.amount,
-                  customerName: customerInfo?.fullName,
-                  customerMobile: customerInfo?.ContactNumber,
+                  customerName: customerInfo?.fullName || "Customer",
+                  customerMobile: customerInfo?.ContactNumber || customerInfo?.phone || "0000000000",
                 }),
               }
             );
@@ -99,6 +99,7 @@ const RazorpayPayment = ({
              console.log("verifyresult",verifyResult);
 
             if (verifyResult.success) {
+              setIsProcessing(false);
               setPaymentStatus("success");
               Alert.alert("Success", "Payment Successful!");
               onSuccess({
@@ -106,7 +107,7 @@ const RazorpayPayment = ({
                 orderId: orderData?._id || orderData?.id,
                 amount,
               });
-                navigation.navigate("Payment");
+              navigation.navigate("Payment");
             } else {
               throw new Error(verifyResult.message);
             }
