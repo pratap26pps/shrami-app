@@ -35,7 +35,8 @@ function truncateId(str, len = 12) {
 function formatAmount(amount) {
   if (amount == null) return "—";
   const num = Number(amount);
-  const rupees = num >= 100 ? num / 100 : num;
+  // Razorpay stores amount in paise; always convert to rupees
+  const rupees = num / 100;
   return `₹${Math.round(rupees).toLocaleString("en-IN")}`;
 }
 

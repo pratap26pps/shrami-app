@@ -31,7 +31,7 @@ export default function CheckoutScreen() {
   const handlePaymentSuccess = () => {
     setShowPay(false);
     clearCart();
-    navigation.navigate("Tabs");
+    navigation.navigate("Payment");
   };
 
   if (hiredWorkers.length === 0) {

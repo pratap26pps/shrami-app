@@ -10,13 +10,7 @@ import {
 } from "react-native";
 
 import RazorpayCheckout from "react-native-razorpay";
-import { useNavigation, NavigationProp } from "@react-navigation/native";
 import { API_BASE } from "../config/api";
-
-type RootStackParamList = {
-  CheckoutScreen: undefined;
-  Payment: undefined;
-};
 
 const RazorpayPayment = ({
   amount,
@@ -29,36 +23,58 @@ const RazorpayPayment = ({
 }) => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [paymentStatus, setPaymentStatus] = useState("pending");
-  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
   const handlePayment = async () => {
     try {
+      const amt = Number(amount) || 0;
+      if (amt < 1) {
+        Alert.alert("Invalid Amount", "Amount must be at least ₹1");
+        return;
+      }
       setIsProcessing(true);
       setPaymentStatus("processing");
+
+      const payload = {
+        amount: amt,
+        receipt: `order_${Date.now()}`,
+        notes: {
+          orderId: orderData?.orderId,
+          customerId: customerInfo?.id || customerInfo?._id,
+          customerName: customerInfo?.fullName,
+        },
+      };
+      console.log("[CreateOrder] API URL:", `${API_BASE}/api/worker/CreateOrder`);
+      console.log("[CreateOrder] Request payload:", payload);
 
       const orderResponse = await fetch(
         `${API_BASE}/api/worker/CreateOrder`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            amount,
-            receipt: `order_${Date.now()}`,
-            notes: {
-              orderId: orderData?.orderId,
-              customerId: customerInfo?.id || customerInfo?._id,
-              customerName: customerInfo?.fullName,
-             
-            },
-          }),
+          body: JSON.stringify(payload),
         }
       );
 
-      const orderResult = await orderResponse.json();
-      console.log("orderResult",orderResult)
+      console.log("[CreateOrder] Response status:", orderResponse.status);
+
+      let orderResult;
+      try {
+        orderResult = await orderResponse.json();
+      } catch (_) {
+        console.error("[CreateOrder] BUG: Response is not valid JSON");
+        throw new Error("Invalid response from server. Check if backend is running.");
+      }
+      console.log("[CreateOrder] Response body:", orderResult);
+
       if (!orderResult.success) {
-        Alert.alert("Order Error", orderResult.message || "Order creation failed");
-        throw new Error(orderResult.message);
+        const errMsg = orderResult.razorpayError || orderResult.error || orderResult.message || "Order creation failed";
+        console.warn("[CreateOrder] BUG - Failed:", errMsg);
+        console.warn("[CreateOrder] BUG - Full response:", JSON.stringify(orderResult));
+        console.warn("[CreateOrder] BUG - razorpayError:", orderResult.razorpayError);
+        console.warn("[CreateOrder] BUG - error:", orderResult.error);
+        console.warn("[CreateOrder] BUG - razorpayStatusCode:", orderResult.razorpayStatusCode);
+        Alert.alert("Order Error", errMsg);
+        throw new Error(errMsg);
       }
 
       const options = {
@@ -69,7 +85,7 @@ const RazorpayPayment = ({
         order_id: orderResult.data.orderId,
         name: "Shrami",
         prefill: {
-          name: customerInfo?.fullName || "Customer",
+          name: customerInfo?.fullName || customerInfo?.name || "Customer",
           contact: String(customerInfo?.ContactNumber || customerInfo?.phone || "9999999999"),
         },
         theme: { color: "#059669" },
@@ -89,14 +105,22 @@ const RazorpayPayment = ({
                   razorpay_signature: response.razorpay_signature,
                   order_id: orderData?._id || orderData?.id || response.razorpay_order_id,
                   amount: orderResult.data.amount,
-                  customerName: customerInfo?.fullName || "Customer",
-                  customerMobile: customerInfo?.ContactNumber || customerInfo?.phone || "0000000000",
+                  customerName: customerInfo?.fullName || customerInfo?.name || "Customer",
+                  customerMobile: String(customerInfo?.ContactNumber || customerInfo?.phone || "0000000000"),
                 }),
               }
             );
 
-            const verifyResult = await verifyResponse.json();
-             console.log("verifyresult",verifyResult);
+            let verifyResult;
+            try {
+              verifyResult = await verifyResponse.json();
+            } catch (_) {
+              throw new Error("Invalid response from server during verification.");
+            }
+
+            if (!verifyResponse.ok) {
+              throw new Error(verifyResult.message || "Verification request failed.");
+            }
 
             if (verifyResult.success) {
               setIsProcessing(false);
@@ -107,7 +131,6 @@ const RazorpayPayment = ({
                 orderId: orderData?._id || orderData?.id,
                 amount,
               });
-              navigation.navigate("Payment");
             } else {
               throw new Error(verifyResult.message);
             }
@@ -190,8 +213,6 @@ const RazorpayPayment = ({
                   style={styles.cancelBtn}
                   onPress={() => {
                     onClose();
-                    navigation.navigate("CheckoutScreen");
-                    Alert.alert("Cancelled", "Payment cancelled");
                   }}
                 >
                   <Text style={styles.cancelText}>Cancel</Text>
