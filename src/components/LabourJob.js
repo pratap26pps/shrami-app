@@ -312,11 +312,17 @@ export default function LabourJob() {
                 showsHorizontalScrollIndicator={false}
                 snapToAlignment="start"
                 decelerationRate="fast"
-                renderItem={({ item: sub }) => (
+                renderItem={({ item: sub }) => {
+                  const isRickshawJob = ["Rickshaw", "Taxi", "Tempo"].some(
+                    (t) => type?.toLowerCase() === t.toLowerCase()
+                  );
+                  return (
                   <TouchableOpacity
                     style={styles.subCard}
                     onPress={() =>
-                      navigation.navigate("WorkerListScreen", { job: sub.title })
+                      isRickshawJob
+                        ? navigation.navigate("RickshawDriverList", { job: sub.title })
+                        : navigation.navigate("WorkerListScreen", { job: sub.title })
                     }
                     activeOpacity={0.8}
                   >
@@ -331,7 +337,8 @@ export default function LabourJob() {
                       />
                     </View>
                   </TouchableOpacity>
-                )}
+                  );
+                }}
               />
             )}
           </View>

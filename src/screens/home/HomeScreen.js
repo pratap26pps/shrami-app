@@ -251,7 +251,9 @@ export default function HomeScreen() {
                 key={item?.id}
                 style={styles.popularItem}
                 onPress={() =>
-                  navigation.navigate("LabourJob", { type: item?.name })
+                  item?.name === "RICKSHAW"
+                    ? navigation.navigate("RickshawDriverList")
+                    : navigation.navigate("LabourJob", { type: item?.name })
                 }
                 activeOpacity={0.7}
               >

@@ -9,17 +9,21 @@ import {
   Alert,
   ActivityIndicator,
   Platform,
+  InteractionManager,
 } from "react-native";
 import MapView, { Marker } from "react-native-maps";
-import MapViewDirections from "react-native-maps-directions";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
+import { decode } from "@mapbox/polyline";
 import { Polyline as MapPolyline } from "react-native-maps";
 import * as Location from "expo-location";
 import { Ionicons } from "@expo/vector-icons";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useNavigation } from "@react-navigation/native";
 
-const GOOGLE_API_KEY = process.env.GOOGLE_API_KEY;
+const GOOGLE_API_KEY =
+  (process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY ||
+    process.env.GOOGLE_API_KEY ||
+    process.env.GOOGLE_MAPS_API_KEY || "").trim() || null;
 
 const ROUTE_COLORS = {
   shadow: "rgba(0, 122, 255, 0.28)",
@@ -44,6 +48,7 @@ export default function MapScreen() {
   const [animatedCoords, setAnimatedCoords] = useState([]);
   const [currentLocation, setCurrentLocation] = useState(null);
   const [isFetchingLocation, setIsFetchingLocation] = useState(false);
+  const [isLoadingRoute, setIsLoadingRoute] = useState(false);
 
   const drivers = [
     { id: 1, name: "Ramesh", type: "auto", latitude: 28.62, longitude: 77.21, photo: "https://randomuser.me/api/portraits/men/1.jpg" },
@@ -53,18 +58,9 @@ export default function MapScreen() {
     { id: 5, name: "Vikas", type: "taxi", latitude: 28.623, longitude: 77.205, photo: "https://randomuser.me/api/portraits/men/5.jpg" },
   ];
 
-  const animateRoute = (points) => {
+  const setRoutePoints = (points) => {
     if (!points || !Array.isArray(points) || points.length === 0) return;
-    let i = 0;
-    setAnimatedCoords([]);
-    const interval = setInterval(() => {
-      if (i < points.length) {
-        setAnimatedCoords((prev) => [...prev, points[i]]);
-        i++;
-      } else {
-        clearInterval(interval);
-      }
-    }, 16);
+    setAnimatedCoords(points);
   };
 
   const handleGetCurrentLocation = async () => {
@@ -108,17 +104,81 @@ export default function MapScreen() {
   };
 
   useEffect(() => {
-    if (!origin || !destination) {
+    if (!origin || !destination || !GOOGLE_API_KEY) {
       setAnimatedCoords([]);
       setDistance(0);
       setRouteCoords([]);
+      return;
     }
+    let cancelled = false;
+    setIsLoadingRoute(true);
+    const url = `https://maps.googleapis.com/maps/api/directions/json?origin=${origin.latitude},${origin.longitude}&destination=${destination.latitude},${destination.longitude}&key=${GOOGLE_API_KEY}`;
+    fetch(url)
+      .then((res) => res.json())
+      .then((data) => {
+        if (cancelled) return;
+        if (data.status !== "OK" || !data.routes?.[0]) {
+          Alert.alert("Route error", "Couldn't find a route. Try different pickup or drop points.");
+          return;
+        }
+        const route = data.routes[0];
+        let points = [];
+        const overview = route.overview_polyline?.points;
+        if (overview) {
+          try {
+            const decoded = decode(overview);
+            points = decoded.map((p) => ({ latitude: p[0], longitude: p[1] }));
+          } catch (_) {
+            route.legs?.forEach((leg) => {
+              leg.steps?.forEach((step) => {
+                try {
+                  const d = decode(step.polyline?.points || "");
+                  d.forEach((p) => points.push({ latitude: p[0], longitude: p[1] }));
+                } catch (_) {}
+              });
+            });
+          }
+        }
+        if (points.length > 0) {
+          const dist = route.legs?.reduce((s, l) => s + (l.distance?.value || 0), 0) / 1000;
+          setDistance(dist);
+          setRouteCoords(points);
+          setRoutePoints(points);
+          InteractionManager.runAfterInteractions(() => {
+            if (mapRef.current && points.length > 0) {
+              try {
+                mapRef.current.fitToCoordinates(points, {
+                  edgePadding: { top: 120, right: 48, bottom: 220, left: 48 },
+                  animated: true,
+                });
+              } catch (_) {}
+            }
+          });
+        }
+      })
+      .catch(() => {
+        if (!cancelled) Alert.alert("Route error", "Couldn't fetch route. Check your connection.");
+      })
+      .finally(() => {
+        if (!cancelled) setIsLoadingRoute(false);
+      });
+    return () => { cancelled = true; };
   }, [origin, destination]);
 
   const pricePerKm = 20;
   const estimatedPrice = distance * pricePerKm;
   const hasBottomSheet = distance > 0;
   const locateButtonBottom = hasBottomSheet ? 200 : 28;
+
+  if (!GOOGLE_API_KEY) {
+    return (
+      <View style={[styles.container, { justifyContent: "center", alignItems: "center", padding: 24 }]}>
+        <Text style={{ fontSize: 16, color: "#666", textAlign: "center" }}>
+          Google Maps API key is missing. Add EXPO_PUBLIC_GOOGLE_MAPS_API_KEY to your .env file.
+        </Text>
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>
@@ -134,6 +194,8 @@ export default function MapScreen() {
             query={{ key: GOOGLE_API_KEY, language: "en" }}
             styles={{ textInput: styles.searchInput, container: { flex: 0 } }}
             textInputProps={{ placeholderTextColor: "#8E8E93" }}
+            enablePoweredByContainer={false}
+            minLength={2}
           />
           <View style={styles.searchDivider} />
           <GooglePlacesAutocomplete
@@ -146,6 +208,8 @@ export default function MapScreen() {
             query={{ key: GOOGLE_API_KEY, language: "en" }}
             styles={{ textInput: styles.searchInput, container: { flex: 0 } }}
             textInputProps={{ placeholderTextColor: "#8E8E93" }}
+            enablePoweredByContainer={false}
+            minLength={2}
           />
         </View>
       </View>
@@ -201,31 +265,6 @@ export default function MapScreen() {
           />
         )}
 
-        {origin && destination && (
-          <MapViewDirections
-            origin={origin}
-            destination={destination}
-            apikey={GOOGLE_API_KEY}
-            strokeWidth={0}
-            onReady={(result) => {
-              if (!result?.coordinates?.length) return;
-              const points = result.coordinates;
-              setDistance(typeof result.distance === "number" ? result.distance : 0);
-              setRouteCoords(points);
-              animateRoute(points);
-              if (mapRef.current && points.length > 0) {
-                mapRef.current.fitToCoordinates(points, {
-                  edgePadding: { top: 120, right: 48, bottom: 220, left: 48 },
-                  animated: true,
-                });
-              }
-            }}
-            onError={() => {
-              Alert.alert("Route error", "Couldn’t find a route. Try different pickup or drop points.");
-            }}
-          />
-        )}
-
         {drivers.map((d) => (
           <Marker
             key={d.id}
@@ -238,6 +277,15 @@ export default function MapScreen() {
           </Marker>
         ))}
       </MapView>
+
+      {origin && destination && isLoadingRoute && (
+        <View style={[styles.loadingOverlay, { top: insets.top + 120 }]}>
+          <View style={styles.loadingCard}>
+            <ActivityIndicator size="large" color={ROUTE_COLORS.accent} />
+            <Text style={styles.loadingText}>Finding route...</Text>
+          </View>
+        </View>
+      )}
 
       <TouchableOpacity
         style={[
@@ -281,7 +329,12 @@ export default function MapScreen() {
                   key={d.id}
                   style={styles.driverCard}
                   activeOpacity={0.8}
-                  onPress={() => navigation.navigate("WorkerScreen", { worker: d })}
+                  onPress={() =>
+                    navigation.navigate("WorkerScreen", {
+                      worker: { ...d, isRickshawDriver: true },
+                      tripPrice: Math.round(estimatedPrice),
+                    })
+                  }
                 >
                   <Image source={{ uri: d.photo }} style={styles.driverAvatar} />
                   <Text style={styles.driverName} numberOfLines={1}>
@@ -309,6 +362,28 @@ const styles = StyleSheet.create({
   },
   map: {
     ...StyleSheet.absoluteFillObject,
+  },
+  loadingOverlay: {
+    position: "absolute",
+    left: 0,
+    right: 0,
+    alignItems: "center",
+    zIndex: 20,
+  },
+  loadingCard: {
+    backgroundColor: "#fff",
+    padding: 20,
+    borderRadius: 12,
+    alignItems: "center",
+    ...Platform.select({
+      android: { elevation: 4 },
+      ios: { shadowColor: "#000", shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.1, shadowRadius: 8 },
+    }),
+  },
+  loadingText: {
+    marginTop: 8,
+    fontSize: 14,
+    color: "#666",
   },
   searchWrapper: {
     position: "absolute",

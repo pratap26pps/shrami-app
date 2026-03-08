@@ -15,19 +15,39 @@ import { Feather } from "@expo/vector-icons";
 export default function WorkerScreen({ route }) {
   const navigation = useNavigation();
   const { hireWorker, removeWorker, isWorkerHired } = useContext(HireContext);
-  const { worker } = route.params;
+  const { worker, tripPrice } = route.params || {};
 
   const isHired = isWorkerHired(worker);
+  const isRickshawDriver = worker?.isRickshawDriver === true;
+  const hasTripPrice = tripPrice != null && tripPrice > 0;
 
   const handleHireToggle = () => {
     if (isHired) removeWorker(worker);
     else hireWorker(worker);
   };
 
+  const handleHireDriverWithTrip = () => {
+    if (isHired) removeWorker(worker);
+    else {
+      const driverWithPrice = {
+        ...worker,
+        price: tripPrice,
+        skills: worker?.skills || `${worker?.type || "Driver"} · Trip`,
+      };
+      hireWorker(driverWithPrice);
+    }
+  };
+
+  const handlePickLocation = () => {
+    navigation.navigate("MapScreen", { driver: worker });
+  };
+
   const avatarSource =
-    worker?.profilePhoto && (worker.profilePhoto.startsWith("http") || worker.profilePhoto.startsWith("https"))
-      ? { uri: worker.profilePhoto }
-      : require("../../assets/redlogo.png");
+    (worker?.profilePhoto || worker?.photo) &&
+    (String(worker.profilePhoto || worker.photo).startsWith("http") ||
+      String(worker.profilePhoto || worker.photo).startsWith("https"))
+      ? { uri: worker.profilePhoto || worker.photo }
+      : require("../../assets/images/profile.png");
 
   const stats = [
     { label: "Experience", value: `${worker?.experience || 0}+`, sub: "EXP." },
@@ -55,13 +75,35 @@ export default function WorkerScreen({ route }) {
         <Image source={avatarSource} style={styles.avatar} />
         <Text style={styles.name}>{worker?.name || "Worker"}</Text>
         <Text style={styles.role}>{worker?.skills || "—"}</Text>
-        <TouchableOpacity
-          style={[styles.hireBtn, { backgroundColor: isHired ? "#22C55E" : "#E53935" }]}
-          onPress={handleHireToggle}
-          activeOpacity={0.8}
-        >
-          <Text style={styles.hireText}>{isHired ? "HIRED" : "HIRE"}</Text>
-        </TouchableOpacity>
+        {isRickshawDriver ? (
+          hasTripPrice ? (
+            <TouchableOpacity
+              style={[styles.hireBtn, { backgroundColor: isHired ? "#22C55E" : "#E53935" }]}
+              onPress={handleHireDriverWithTrip}
+              activeOpacity={0.8}
+            >
+              <Text style={styles.hireText}>
+                {isHired ? "HIRED" : `HIRE · ₹${tripPrice}`}
+              </Text>
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity
+              style={[styles.hireBtn, { backgroundColor: "#E53935" }]}
+              onPress={handlePickLocation}
+              activeOpacity={0.8}
+            >
+              <Text style={styles.hireText}>Pick Location</Text>
+            </TouchableOpacity>
+          )
+        ) : (
+          <TouchableOpacity
+            style={[styles.hireBtn, { backgroundColor: isHired ? "#22C55E" : "#E53935" }]}
+            onPress={handleHireToggle}
+            activeOpacity={0.8}
+          >
+            <Text style={styles.hireText}>{isHired ? "HIRED" : "HIRE"}</Text>
+          </TouchableOpacity>
+        )}
       </View>
 
       {/* Stats Row */}
@@ -105,8 +147,12 @@ export default function WorkerScreen({ route }) {
         </View>
 
         <View style={styles.priceSection}>
-          <Text style={styles.priceLabel}>Price</Text>
-          <Text style={styles.priceValue}>₹{worker?.price ?? "—"}</Text>
+          <Text style={styles.priceLabel}>
+            {hasTripPrice ? "Trip Price" : "Price"}
+          </Text>
+          <Text style={styles.priceValue}>
+            ₹{hasTripPrice ? tripPrice : (worker?.price ?? "—")}
+          </Text>
         </View>
 
         <View style={styles.infoSection}>

@@ -23,11 +23,19 @@
     ],
     "android": {
       "package": "com.pratap26pps.shrami",
-      "backgroundColor": "#E53935"
+      "backgroundColor": "#E53935",
+      "config": {
+        "googleMaps": {
+          "apiKey": "YOUR_GOOGLE_MAPS_API_KEY"
+        }
+      }
     },
     "ios": {
       "bundleIdentifier": "com.pratap26pps.shrami",
       "backgroundColor": "#E53935",
+      "config": {
+        "googleMapsApiKey": "YOUR_GOOGLE_MAPS_API_KEY"
+      },
       "infoPlist": {
         "NSLocationWhenInUseUsageDescription": "This app needs access to your location to show your current position on the map and help you find nearby drivers.",
         "NSLocationAlwaysAndWhenInUseUsageDescription": "This app needs access to your location to show your current position on the map and help you find nearby drivers.",
