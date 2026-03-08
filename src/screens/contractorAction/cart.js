@@ -15,18 +15,53 @@ import { AuthContext } from "../../context/AuthContext";
 export default function CheckoutScreen() {
   const navigation = useNavigation();
   const [showPay, setShowPay] = useState(false);
-  const { hiredWorkers } = useContext(HireContext);
+  const { hiredWorkers, clearCart, removeWorkerAt } = useContext(HireContext);
   const { user } = useContext(AuthContext);
-  console.log("user",user)
-    // 👇 add dummy values here
- 
- console.log("hiredWorkers",hiredWorkers)
+
+  const itemsTotal = hiredWorkers.reduce((sum, w) => sum + (Number(w.price) || 0), 0);
+  const platformFees = 45;
+  const gst = Math.round(itemsTotal * 0.05) || 0;
+  const totalAmount = itemsTotal + platformFees + gst;
+
   const orderData = {
     orderId: "TEMP1234567",
     id: "TEMP1234567",
   };
- 
-  
+
+  const handlePaymentSuccess = () => {
+    setShowPay(false);
+    clearCart();
+    navigation.navigate("Tabs");
+  };
+
+  if (hiredWorkers.length === 0) {
+    return (
+      <View style={styles.container}>
+        <View style={styles.header}>
+          <Text style={styles.logo}>SHRAM!</Text>
+          <Ionicons name="person-circle" size={42} color="#E53935" />
+        </View>
+        <View style={styles.checkoutBar}>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <Ionicons name="arrow-back" size={22} color="#000" />
+          </TouchableOpacity>
+          <Text style={styles.checkoutText}>Checkout</Text>
+        </View>
+        <View style={[styles.card, { alignItems: "center", paddingVertical: 40 }]}>
+          <Feather name="shopping-cart" size={48} color="#ccc" />
+          <Text style={styles.cartText}>Your cart is empty</Text>
+          <Text style={{ color: "#777", marginTop: 8 }}>Add labour from Home or Make Labour Team</Text>
+          <TouchableOpacity
+            style={{ marginTop: 20, paddingVertical: 12, paddingHorizontal: 24, backgroundColor: "#E53935", borderRadius: 24 }}
+            onPress={() => navigation.navigate("Tabs")}
+          >
+            <Text style={{ color: "#fff", fontWeight: "bold" }}>Go to Home</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    );
+  }
+
   return (
     <View style={styles.container}>
       {/* Header */}
@@ -37,7 +72,9 @@ export default function CheckoutScreen() {
 
       {/* Checkout Title */}
       <View style={styles.checkoutBar}>
-        <Ionicons name="arrow-back" size={22} color="#000" />
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <Ionicons name="arrow-back" size={22} color="#000" />
+        </TouchableOpacity>
         <Text style={styles.checkoutText}>Checkout</Text>
       </View>
 
@@ -49,22 +86,22 @@ export default function CheckoutScreen() {
             <Text style={styles.cartText}>Items In Cart</Text>
           </View>
             {hiredWorkers.map((w, i) => (
-    
-            <View key={i} style={styles.cartItem}>
-              <View style={styles.avatar} />
-
-              <View style={{ flex: 1 }}>
-                <Text style={styles.category}>{w.name}</Text>
-                <Text style={styles.details}>see details...</Text>
-              </View>
-
-              <View style={styles.qtyBox}>
-                <Text style={styles.qtyBtn}>-</Text>
+              <View key={w._id || w.id || i} style={styles.cartItem}>
+                <View style={styles.avatar} />
+                <View style={{ flex: 1 }}>
+                  <Text style={styles.category}>{w.name}</Text>
+                  <Text style={styles.details}>{w.skills || "—"} · ₹{w.price ?? "—"}</Text>
+                </View>
                 <Text style={styles.qty}>1</Text>
-                <Text style={styles.qtyBtn}>+</Text>
+                <TouchableOpacity
+                  style={styles.removeBtn}
+                  onPress={() => removeWorkerAt(i)}
+                  hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
+                >
+                  <Ionicons name="trash-outline" size={22} color="#E53935" />
+                </TouchableOpacity>
               </View>
-            </View>
-          ))}
+            ))}
 
           <Text style={styles.hire}>HIRE</Text>
         </View>
@@ -74,23 +111,23 @@ export default function CheckoutScreen() {
           <Text style={styles.billTitle}>Bill Details</Text>
 
           <View style={styles.billRow}>
-            <Text>Items total</Text>
-            <Text>₹ {hiredWorkers[0]?.price}</Text>
+            <Text>Items total ({hiredWorkers.length})</Text>
+            <Text>₹ {itemsTotal}</Text>
           </View>
 
           <View style={styles.billRow}>
             <Text>Platform Fees</Text>
-            <Text>45</Text>
+            <Text>₹ {platformFees}</Text>
           </View>
 
           <View style={styles.billRow}>
             <Text>GST</Text>
-            <Text>300</Text>
+            <Text>₹ {gst}</Text>
           </View>
 
           <View style={styles.totalBar}>
             <View>
-              <Text style={styles.totalAmount}>₹ {hiredWorkers[0]?.price}</Text>      
+              <Text style={styles.totalAmount}>₹ {totalAmount}</Text>
               <Text style={styles.totalLabel}>Total</Text>
             </View>
 
@@ -106,12 +143,12 @@ export default function CheckoutScreen() {
 
       <RazorpayPayment
         visible={showPay}
-        amount={hiredWorkers[0]?.price}
+        amount={totalAmount}
         orderData={orderData}
-        customerInfo={{...user }}
+        customerInfo={{ ...user }}
         onSuccess={(data) => {
           console.log("paid", data);
-          setShowPay(false);
+          handlePaymentSuccess();
         }}
         onFailure={(err) => {
           console.log("err", err);
@@ -220,6 +257,12 @@ const styles = StyleSheet.create({
   qty: {
     color: "#FFF",
     fontWeight: "800",
+    marginRight: 8,
+  },
+
+  removeBtn: {
+    padding: 8,
+    marginLeft: 4,
   },
 
   hire: {

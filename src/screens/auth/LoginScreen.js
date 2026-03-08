@@ -8,6 +8,7 @@ import {
   Alert,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { signInWithGoogleInApp } from "../../services/googleAuth";
 import { useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 
@@ -24,7 +25,24 @@ export default function LoginScreen() {
   const [contactNumber, setContactNumber] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [googleLoading, setGoogleLoading] = useState(false);
   const { loginWithToken } = useContext(AuthContext);
+
+  const handleGoogleSignIn = async () => {
+    try {
+      setGoogleLoading(true);
+      const token = await signInWithGoogleInApp();
+      if (token) {
+        await loginWithToken(token);
+        Alert.alert("Success", "Signed in with Google 🎉");
+      }
+      // User cancelled or error: do nothing
+    } catch (e) {
+      Alert.alert("Error", "Google sign-in failed. Please try again.");
+    } finally {
+      setGoogleLoading(false);
+    }
+  };
 
   const loginhandler = async () => {
     if (!contactNumber || contactNumber.length !== 10) {
@@ -109,6 +127,7 @@ export default function LoginScreen() {
       <View style={styles.form}>
         <TextInput
           placeholder="Contact no."
+          placeholderTextColor="#000"
           style={styles.input}
           keyboardType="phone-pad"
           maxLength={10}
@@ -119,6 +138,7 @@ export default function LoginScreen() {
         <View style={styles.passwordContainer}>
           <TextInput
             placeholder="Password"
+            placeholderTextColor="#000"
             style={styles.passwordInput}
             secureTextEntry={!showPassword}
             value={password}
@@ -149,18 +169,17 @@ export default function LoginScreen() {
         </TouchableOpacity>
 
         <TouchableOpacity
-          onPress={() =>
-            Linking.openURL(
-              "https://shrami-backend.onrender.com/api/auth/google"
-            )
-          }
-          style={styles.googleBtn}
+          onPress={handleGoogleSignIn}
+          disabled={googleLoading}
+          style={[styles.googleBtn, googleLoading && { opacity: 0.7 }]}
         >
           <Image
             source={require("../../assets/images/google.png")}
             style={styles.googleIcon}
           />
-          <Text style={styles.googleText}>Continue with Google</Text>
+          <Text style={styles.googleText}>
+            {googleLoading ? "Signing in…" : "Continue with Google"}
+          </Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
@@ -235,6 +254,9 @@ const styles = StyleSheet.create({
     padding: 14,
     borderRadius: 25,
     marginBottom: 14,
+    color: "#000",
+    borderWidth: 1,
+    borderColor: "#333",
   },
 
   forgot: {
@@ -283,10 +305,13 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     paddingHorizontal: 16,
     marginBottom: 14,
+    borderWidth: 1,
+    borderColor: "#333",
   },
 
   passwordInput: {
     flex: 1,
     paddingVertical: 14,
+    color: "#000",
   },
 });

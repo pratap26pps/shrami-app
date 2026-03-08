@@ -7,12 +7,12 @@ import {
   TouchableOpacity,
   SafeAreaView,
   Image,
-  Linking,
   Alert,
   KeyboardAvoidingView,
   Platform,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import { signInWithGoogleInApp } from "../../services/googleAuth";
 import { AuthContext } from "../../context/AuthContext";
 import { auth } from "../../services/firebase";
 import { PhoneAuthProvider, signInWithCredential } from "firebase/auth";
@@ -29,7 +29,23 @@ export default function SignUpScreen() {
   const [password, setPassword] = useState("");
   const [ConfirmPassword, setConfirmPassword] = useState("");
   const [fullName, setFullname] = useState("");
+  const [googleLoading, setGoogleLoading] = useState(false);
   const recaptchaVerifier = useRef(null);
+
+  const handleGoogleSignIn = async () => {
+    try {
+      setGoogleLoading(true);
+      const token = await signInWithGoogleInApp();
+      if (token) {
+        await loginWithToken(token);
+        Alert.alert("Success", "Signed in with Google 🎉");
+      }
+    } catch (e) {
+      Alert.alert("Error", "Google sign-in failed. Please try again.");
+    } finally {
+      setGoogleLoading(false);
+    }
+  };
 
   const sendOTP = async () => {
     try {
@@ -125,6 +141,7 @@ export default function SignUpScreen() {
 
           <TextInput
             placeholder="Full name"
+            placeholderTextColor="#000"
             style={styles.input}
             value={fullName}
             onChangeText={setFullname}
@@ -132,6 +149,7 @@ export default function SignUpScreen() {
           
           <TextInput
             placeholder="Contact no."
+            placeholderTextColor="#000"
             style={styles.input}
             keyboardType="phone-pad"
             onChangeText={setPhone}
@@ -140,6 +158,7 @@ export default function SignUpScreen() {
           <View style={styles.passwordContainer}>
             <TextInput
               placeholder="Password"
+              placeholderTextColor="#000"
               style={styles.passwordInput}
               secureTextEntry={!showPassword}
               value={password}
@@ -157,6 +176,7 @@ export default function SignUpScreen() {
            <View style={styles.passwordContainer}>
             <TextInput
               placeholder="Confirm Password"
+              placeholderTextColor="#000"
               style={styles.passwordInput}
               secureTextEntry={!showConfirmPassword}
               value={ConfirmPassword}
@@ -177,18 +197,17 @@ export default function SignUpScreen() {
           </TouchableOpacity>
 
           <TouchableOpacity
-            onPress={() =>
-              Linking.openURL(
-                "https://shrami-backend.onrender.com/api/auth/google"
-              )
-            }
-            style={styles.googleBtn}
+            onPress={handleGoogleSignIn}
+            disabled={googleLoading}
+            style={[styles.googleBtn, googleLoading && { opacity: 0.7 }]}
           >
             <Image
               source={require("../../assets/images/google.png")}
               style={styles.googleIcon}
             />
-            <Text style={styles.googleText}>Continue with Google</Text>
+            <Text style={styles.googleText}>
+              {googleLoading ? "Signing in…" : "Continue with Google"}
+            </Text>
           </TouchableOpacity>
         </View>
       ) : (
@@ -206,6 +225,7 @@ export default function SignUpScreen() {
               <TextInput
                 style={styles.input}
                 placeholder="Enter OTP"
+                placeholderTextColor="#000"
                 keyboardType="number-pad"
                 value={otp}
                 onChangeText={setOtp}
@@ -295,6 +315,9 @@ const styles = StyleSheet.create({
     padding: 14,
     borderRadius: 25,
     marginBottom: 14,
+    color: "#000",
+    borderWidth: 1,
+    borderColor: "#333",
   },
 
   forgot: {
@@ -357,7 +380,7 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     marginBottom: 20,
     fontSize: 16,
-    color: "#333",
+    color: "#000",
   },
 
  pickerContainer: {
@@ -398,7 +421,7 @@ const styles = StyleSheet.create({
 
   subtitle: {
     fontSize: 14,
-    color: "#666",
+    color: "#000",
     textAlign: "center",
     marginBottom: 25,
   },
@@ -415,5 +438,6 @@ const styles = StyleSheet.create({
   passwordInput: {
     flex: 1,
     paddingVertical: 14,
+    color: "#000",
   },
 });

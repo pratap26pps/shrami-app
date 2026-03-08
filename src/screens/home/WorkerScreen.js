@@ -6,24 +6,20 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from "react-native";
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import { HireContext } from "../../context/HireContext";
 import { useNavigation } from "@react-navigation/native";
 
 export default function WorkerScreen({ route }) {
-
   const navigation = useNavigation();
-  const { hireWorker } = useContext(HireContext);
-  // Ideally pass selected worker from previous screen
+  const { hireWorker, removeWorker, isWorkerHired } = useContext(HireContext);
   const { worker } = route.params;
-  console.log(worker)
 
+  const isHired = isWorkerHired(worker);
 
-  const [isHired, setIsHired] = useState(false);
-
-  const handleHire = () => {
-    hireWorker(worker);
-    setIsHired(true);
+  const handleHireToggle = () => {
+    if (isHired) removeWorker(worker);
+    else hireWorker(worker);
   };
 
 
@@ -63,8 +59,8 @@ export default function WorkerScreen({ route }) {
             detail?.hireBtn,
             { backgroundColor: isHired ? "#4CAF50" : "#E53935" },
           ]}
-          disabled={isHired}
-          onPress={handleHire}
+          onPress={handleHireToggle}
+          activeOpacity={0.8}
         >
           <Text style={detail?.hireText}>
             {isHired ? "HIRED" : "HIRE"}

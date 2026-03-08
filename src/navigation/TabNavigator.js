@@ -1,5 +1,6 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { Image } from "react-native";
+import { Image, Platform } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import HomeScreen from "../screens/home/HomeScreen";
  import WorkerListScreen from "../screens/home/SearchScreen";
@@ -29,6 +30,9 @@ const TAB_ICONS = {
 };
 
 export default function TabNavigator() {
+  const insets = useSafeAreaInsets();
+  const tabBarBottom = Platform.OS === "ios" ? Math.max(insets.bottom, 12) : 12;
+
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
@@ -48,9 +52,14 @@ export default function TabNavigator() {
           );
         },
         tabBarStyle: {
-          height: 60,
-          paddingBottom: 8,
-          paddingTop: 8,
+          height: 56 + tabBarBottom,
+          paddingTop: 10,
+          paddingBottom: tabBarBottom,
+          elevation: 8,
+          shadowColor: "#000",
+          shadowOffset: { width: 0, height: -2 },
+          shadowOpacity: 0.08,
+          shadowRadius: 4,
         },
       })}
     >

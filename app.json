@@ -2,17 +2,13 @@
   "expo": {
     "name": "shrami",
     "slug": "shrami",
-   "scheme": "shramiapp",
-
-
-   "icon": "./src/assets/appicon.png",  
-
+    "scheme": "shramiapp",
+    "icon": "./src/assets/appicon.png",
     "splash": {
       "image": "./src/assets/appicon.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#E53935"
     },
-
     "plugins": [
       "expo-secure-store",
       [
@@ -22,13 +18,16 @@
           "locationAlwaysAndWhenInUsePermission": "This app needs access to your location to show your current position on the map and help you find nearby drivers.",
           "locationAlwaysPermission": "This app needs access to your location to show your current position on the map and help you find nearby drivers."
         }
-      ]
+      ],
+      "expo-web-browser"
     ],
     "android": {
-      "package": "com.pratap26pps.shrami"
+      "package": "com.pratap26pps.shrami",
+      "backgroundColor": "#E53935"
     },
     "ios": {
       "bundleIdentifier": "com.pratap26pps.shrami",
+      "backgroundColor": "#E53935",
       "infoPlist": {
         "NSLocationWhenInUseUsageDescription": "This app needs access to your location to show your current position on the map and help you find nearby drivers.",
         "NSLocationAlwaysAndWhenInUseUsageDescription": "This app needs access to your location to show your current position on the map and help you find nearby drivers.",

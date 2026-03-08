@@ -11,15 +11,18 @@ function DeepLinkHandler() {
 
   useEffect(() => {
     const handleUrl = (url) => {
-      const { path, queryParams } = Linking.parse(url);
+      const { path, hostname, queryParams } = Linking.parse(url);
+      // expo-linking: scheme://auth-success?token=... gives hostname="auth-success", path=null
+      const isAuthSuccess = path === "auth-success" || hostname === "auth-success";
 
-      // Existing user
-      if (path === "auth-success" && queryParams?.token) {
+      // Existing user (Google OAuth callback)
+      if (isAuthSuccess && queryParams?.token) {
         loginWithToken(queryParams.token);
       }
 
       // New user
-      if (path === "google-callback") {
+      const isGoogleCallback = path === "google-callback" || hostname === "google-callback";
+      if (isGoogleCallback) {
         setGoogleProfile(queryParams);
       }
     };
@@ -42,7 +45,7 @@ function DeepLinkHandler() {
 
 
 const linking = {
-  prefixes: ["shrami://"],
+  prefixes: ["shramiapp://"],
   // config: {
   //   screens: {
   //     Tabs: {

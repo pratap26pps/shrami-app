@@ -1,5 +1,3 @@
-//new code
-
 import {
   View,
   Text,
@@ -9,9 +7,11 @@ import {
   StyleSheet,
   TextInput,
   Dimensions,
+  Platform,
 } from "react-native";
 import { useRoute, useNavigation } from "@react-navigation/native";
 import { Feather } from "@expo/vector-icons";
+import { useState, useMemo } from "react";
 
 const { width, height } = Dimensions.get("window");
 
@@ -232,19 +232,39 @@ export default function LabourJob() {
   const route = useRoute();
   const navigation = useNavigation();
   const { type } = route.params;
-   
+  const [search, setSearch] = useState("");
+
   const jobs = JOBS[type?.toLowerCase()] || [];
+
+  const filteredSections = useMemo(() => {
+    const q = (search || "").trim().toLowerCase();
+    return jobs
+      .map((job) => {
+        const sublist = SUBJOBS[MAP[job.name]] || [];
+        const filteredSubs = q
+          ? sublist.filter(
+              (sub) =>
+                (sub.title && sub.title.toLowerCase().includes(q)) ||
+                (sub.subtitle && sub.subtitle.toLowerCase().includes(q))
+            )
+          : sublist;
+        const nameMatches = q && job.name && job.name.toLowerCase().includes(q);
+        const hasMatchingSubs = filteredSubs.length > 0;
+        if (q && !nameMatches && !hasMatchingSubs) return null;
+        return { job, subjobs: filteredSubs };
+      })
+      .filter(Boolean);
+  }, [jobs, search]);
 
   return (
     <View style={styles.container}>
       <FlatList
-        data={jobs}
-        keyExtractor={(item) => item.id}
+        data={filteredSections}
+        keyExtractor={(item) => item.job.id}
         contentContainerStyle={styles.listContainer}
         showsVerticalScrollIndicator={false}
         ListHeaderComponent={
           <>
-            {/* HEADER */}
             <View style={styles.header}>
               <Image
                 source={require("../assets/redlogo.png")}
@@ -261,65 +281,61 @@ export default function LabourJob() {
               </TouchableOpacity>
             </View>
 
-            {/* SEARCH */}
             <View style={styles.searchRow}>
               <View style={styles.searchBox}>
                 <TextInput
-                  placeholder="Search labour..."
-                  placeholderTextColor="#888"
-                  style={styles.searchText}
+                  placeholder="Search labour by name or skill..."
+                  placeholderTextColor="#000"
+                  style={styles.searchInput}
+                  value={search}
+                  onChangeText={setSearch}
                 />
               </View>
-              <TouchableOpacity 
-              onPress={() => navigation.navigate("MapScreen")}
-              style={styles.filterBtn}>
-                <Feather
-                  name="sliders"
-                  size={20}
-                  color="#fff"
-                  style={{ transform: [{ rotate: "90deg" }] }}
-                />
-              </TouchableOpacity>
             </View>
 
             <Text style={styles.title}>
-              {type.toUpperCase()} JOBS
+              {type?.toUpperCase?.() || type} JOBS
             </Text>
           </>
         }
-renderItem={({ item }) => (
-  <View style={styles.categorySection}>
-    <Text style={styles.sectionTitle}>{item.name}</Text>
+        renderItem={({ item }) => (
+          <View style={styles.categorySection}>
+            <Text style={styles.sectionTitle}>{item.job.name}</Text>
 
-    <FlatList data={SUBJOBS[MAP[item.name]] || []}
-      keyExtractor={(s) => s.id}
-      horizontal
-      showsHorizontalScrollIndicator={false}
-      snapToAlignment="start"
-      decelerationRate="fast"
-      renderItem={({ item: sub }) => (
-        <TouchableOpacity style={styles.subCard}  onPress={() =>
-    navigation.navigate("WorkerListScreen", { job: sub.title })
-  }>
-          <Image source={sub.image} style={styles.subImage} />
-          
-          <View style={styles.subBottom}>
-            <Text style={styles.subText}>
-              {sub.title} {sub.subtitle}
-            </Text>
-            <Image
-              source={require("../assets/images/arrow.png")}
-              style={styles.subArrow}
-            />
+            {item.subjobs.length === 0 ? (
+              <Text style={styles.noMatch}>No match for "{search}"</Text>
+            ) : (
+              <FlatList
+                data={item.subjobs}
+                keyExtractor={(s) => s.id}
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                snapToAlignment="start"
+                decelerationRate="fast"
+                renderItem={({ item: sub }) => (
+                  <TouchableOpacity
+                    style={styles.subCard}
+                    onPress={() =>
+                      navigation.navigate("WorkerListScreen", { job: sub.title })
+                    }
+                    activeOpacity={0.8}
+                  >
+                    <Image source={sub.image} style={styles.subImage} />
+                    <View style={styles.subBottom}>
+                      <Text style={styles.subText}>
+                        {sub.title} {sub.subtitle}
+                      </Text>
+                      <Image
+                        source={require("../assets/images/arrow.png")}
+                        style={styles.subArrow}
+                      />
+                    </View>
+                  </TouchableOpacity>
+                )}
+              />
+            )}
           </View>
-        </TouchableOpacity>
-      )}
-    />
-  </View>
-)}
-
-
-
+        )}
       />
     </View>
   );
@@ -374,15 +390,31 @@ const styles = StyleSheet.create({
 
   searchBox: {
     flex: 1,
-    backgroundColor: "#eee",
-    paddingVertical: height * 0.001,
+    backgroundColor: "#fff",
     paddingHorizontal: width * 0.04,
-    borderRadius: width * 0.04,
+    borderRadius: width * 0.05,
+    borderWidth: 1,
+    borderColor: "#333",
+    justifyContent: "center",
+    minHeight: 48,
+  },
+
+  searchInput: {
+    paddingVertical: Platform.OS === "ios" ? 12 : 8,
+    fontSize: 16,
+    color: "#000",
   },
 
   searchText: {
     fontSize: width * 0.04,
     color: "#333",
+  },
+
+  noMatch: {
+    fontSize: 14,
+    color: "#777",
+    fontStyle: "italic",
+    marginVertical: 8,
   },
 
   filterBtn: {
