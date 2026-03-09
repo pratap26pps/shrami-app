@@ -41,6 +41,11 @@
         "NSLocationAlwaysAndWhenInUseUsageDescription": "This app needs access to your location to show your current position on the map and help you find nearby drivers.",
         "NSLocationAlwaysUsageDescription": "This app needs access to your location to show your current position on the map and help you find nearby drivers."
       }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "b0a7d6fd-7f28-425b-b852-d2a2ac7b5c69"
+      }
     }
   }
 }
